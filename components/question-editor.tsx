@@ -25,6 +25,7 @@ export interface MCQuestion {
 
 export interface FRQuestion {
   questionText: string
+  correctAnswer: string
   points: number
   solution: string
   order: number
@@ -283,6 +284,33 @@ export function QuestionEditor({
             Click the letter circle to mark the correct answer. Currently
             correct:{" "}
             <strong>{String.fromCharCode(65 + mcQ.correctAnswer)}</strong>
+          </p>
+        </div>
+      )}
+
+      {/* FR-specific: correct answer */}
+      {type === "fr" && (
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-foreground">
+            Correct Answer{" "}
+            <span className="text-muted-foreground font-normal">
+              (for auto-grading)
+            </span>
+          </label>
+          <input
+            type="text"
+            value={(question as FRQuestion).correctAnswer || ""}
+            onChange={(e) =>
+              onUpdate({
+                ...question,
+                correctAnswer: e.target.value,
+              } as FRQuestion)
+            }
+            className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            placeholder="Enter the exact correct answer for auto-grading (case-sensitive)"
+          />
+          <p className="text-xs text-muted-foreground">
+            Student's answer must exactly match this text to receive full points. Leave empty to skip auto-grading.
           </p>
         </div>
       )}
