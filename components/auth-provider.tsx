@@ -44,9 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
-        credentials: "include",
       })
-
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || "Login failed")
       await mutate({ user: json.user }, false)
@@ -62,9 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, password }),
-        credentials: "include",
       })
-
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || "Signup failed")
       await mutate({ user: json.user }, false)
@@ -75,11 +71,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   )
 
   const logout = useCallback(async () => {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-      credentials: "include",
-    })
-
+    await fetch("/api/auth/logout", { method: "POST" })
     await mutate({ user: null }, false)
     router.push("/")
     router.refresh()
