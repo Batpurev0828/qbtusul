@@ -49,7 +49,7 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
       ...prev,
       {
         questionText: "",
-        options: ["", "", "", ""],
+        options: ["", "", "", "", ""],
         correctAnswer: 0,
         points: 1,
         solution: "",

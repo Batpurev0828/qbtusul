@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react"
 import { KaTeXRenderer } from "@/components/katex-renderer"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 import {
   ImagePlus,
   Trash2,
@@ -201,7 +202,7 @@ export function QuestionEditor({
             <div className="text-xs font-medium text-muted-foreground mb-2">
               Preview:
             </div>
-            <KaTeXRenderer
+            <MarkdownRenderer
               content={question.questionText}
               className="text-sm text-foreground leading-relaxed"
             />
@@ -235,11 +236,10 @@ export function QuestionEditor({
                 onClick={() =>
                   onUpdate({ ...mcQ, correctAnswer: oi } as MCQuestion)
                 }
-                className={`shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-colors ${
-                  mcQ.correctAnswer === oi
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border text-muted-foreground hover:border-primary/50"
-                }`}
+                className={`shrink-0 h-6 w-6 rounded-full border-2 flex items-center justify-center text-xs font-bold transition-colors ${mcQ.correctAnswer === oi
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border text-muted-foreground hover:border-primary/50"
+                  }`}
                 title={`Mark option ${String.fromCharCode(65 + oi)} as correct`}
               >
                 {String.fromCharCode(65 + oi)}
@@ -339,10 +339,11 @@ export function QuestionEditor({
             <div className="text-xs font-medium text-muted-foreground mb-2">
               Solution preview:
             </div>
-            <KaTeXRenderer
+            <MarkdownRenderer
               content={question.solution}
               className="text-sm text-foreground leading-relaxed"
             />
+
           </div>
         )}
       </div>

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useAuth } from "@/components/auth-provider"
-import { KaTeXRenderer } from "@/components/katex-renderer"
+// import { KaTeXRenderer } from "@/components/katex-renderer"
 import { TestTimer } from "@/components/test-timer"
 import useSWR from "swr"
 import {
@@ -12,6 +12,7 @@ import {
   ChevronRight,
   Loader2,
 } from "lucide-react"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 
 interface MCQ {
   questionText: string
@@ -242,10 +243,12 @@ export default function TakeTestPage() {
                 </span>
               </div>
 
-              <KaTeXRenderer
+              {/* <KaTeXRenderer
                 content={currentQ.questionText}
                 className="text-foreground leading-relaxed"
-              />
+              /> */}
+
+              <MarkdownRenderer content={currentQ.questionText} className="text-foreground leading-relaxed"/>
 
               {/* MC options */}
               {currentSection === "mc" && "options" in currentQ && (
@@ -274,7 +277,7 @@ export default function TakeTestPage() {
                       >
                         {String.fromCharCode(65 + oi)}
                       </span>
-                      <KaTeXRenderer content={opt} className="flex-1" />
+                      <MarkdownRenderer content={opt} className="flex-1" />
                     </button>
                   ))}
                 </div>
