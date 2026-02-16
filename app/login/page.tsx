@@ -23,6 +23,7 @@ export default function LoginPage() {
     try {
       await login(email, password)
       router.push("/tests")
+      router.refresh();
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Login failed")
     } finally {
