@@ -25,6 +25,7 @@ export interface MCQuestion {
 
 export interface FRQuestion {
   questionText: string
+  correctAnswer: string
   points: number
   solution: string
   order: number
@@ -284,6 +285,27 @@ export function QuestionEditor({
             correct:{" "}
             <strong>{String.fromCharCode(65 + mcQ.correctAnswer)}</strong>
           </p>
+        </div>
+      )}
+
+      {/* Solution */}
+      {type === "fr" && (
+        <div className="flex flex-col gap-2">
+          <label className="text-sm font-medium text-foreground">
+            Correct Answer
+          </label>
+          <textarea
+            value={(question as FRQuestion).correctAnswer || ""}
+            onChange={(e) =>
+              onUpdate({
+                ...question,
+                correctAnswer: e.target.value,
+              } as FRQuestion)
+            }
+            rows={2}
+            className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
+            placeholder="Exact-match answer used for automatic FR grading."
+          />
         </div>
       )}
 

@@ -144,8 +144,8 @@ export default function TestDetailPage() {
                   - Multiple choice questions will be auto-graded immediately.
                 </li>
                 <li>
-                  - Free response questions will show the solution for
-                  self-review (not scored).
+                  - Free response answers are auto-graded by exact match with
+                  the expected answer, and solutions are shown after submission.
                 </li>
                 <li>
                   - You can review your answers and see solutions after

@@ -63,6 +63,7 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
       ...prev,
       {
         questionText: "",
+        correctAnswer: "",
         points: 5,
         solution: "",
         order: prev.length + 1,

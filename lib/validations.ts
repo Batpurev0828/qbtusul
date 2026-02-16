@@ -22,6 +22,7 @@ export const mcQuestionSchema = z.object({
 
 export const frQuestionSchema = z.object({
   questionText: z.string().default(""),
+  correctAnswer: z.string().default(""),
   points: z.number().min(0).default(5),
   solution: z.string().default(""),
   order: z.number().int().min(0).default(0),

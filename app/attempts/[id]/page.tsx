@@ -33,6 +33,8 @@ interface FRResult {
   questionIndex: number
   questionText: string
   userAnswer: string
+  correctAnswer: string
+  isCorrect: boolean
   points: number
   earnedPoints: number
   solution: string
@@ -125,9 +127,10 @@ export default function AttemptDetailPage() {
       new Date(attempt.startedAt).getTime()) /
       60000
   )
-  const mcPercentage =
-    attempt.totalMCPoints > 0
-      ? Math.round((attempt.mcScore / attempt.totalMCPoints) * 100)
+  const frScore = attempt.frAnswers.reduce((sum, fr) => sum + fr.earnedPoints, 0)
+  const totalPercentage =
+    attempt.totalPossible > 0
+      ? Math.round((attempt.totalScore / attempt.totalPossible) * 100)
       : 0
 
   return (
@@ -155,9 +158,9 @@ export default function AttemptDetailPage() {
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold text-primary">
-                {mcPercentage}%
+                {totalPercentage}%
               </div>
-              <div className="text-sm text-muted-foreground">MC Score</div>
+              <div className="text-sm text-muted-foreground">Total Score</div>
             </div>
           </div>
 
@@ -176,8 +179,17 @@ export default function AttemptDetailPage() {
                 <FileText className="h-4 w-4" />
                 <span className="text-xs font-medium">FR Points</span>
               </div>
-              <span className="text-lg font-bold text-muted-foreground">
-                {attempt.totalFRPoints} (review)
+              <span className="text-lg font-bold text-foreground">
+                {frScore} / {attempt.totalFRPoints}
+              </span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1.5 text-muted-foreground">
+                <Award className="h-4 w-4" />
+                <span className="text-xs font-medium">Total Points</span>
+              </div>
+              <span className="text-lg font-bold text-foreground">
+                {attempt.totalScore} / {attempt.totalPossible}
               </span>
             </div>
             <div className="flex flex-col gap-1">
@@ -320,12 +332,18 @@ export default function AttemptDetailPage() {
                     onClick={() => toggleFR(i)}
                     className="w-full p-4 flex items-center gap-3 text-left"
                   >
-                    <FileText className="h-5 w-5 text-muted-foreground shrink-0" />
+                    {fr.isCorrect ? (
+                      <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
+                    ) : (
+                      <XCircle className="h-5 w-5 text-destructive shrink-0" />
+                    )}
                     <span className="flex-1 font-medium text-sm text-foreground">
                       Question {i + 1}
                     </span>
-                    <span className="text-sm text-muted-foreground">
-                      {fr.points} pts (review)
+                    <span
+                      className={`text-sm font-bold ${fr.isCorrect ? "text-green-600" : "text-destructive"}`}
+                    >
+                      {fr.earnedPoints}/{fr.points}
                     </span>
                     <ChevronDown
                       className={`h-4 w-4 text-muted-foreground transition-transform ${expandedFR.has(i) ? "rotate-180" : ""}`}
@@ -340,10 +358,20 @@ export default function AttemptDetailPage() {
                       {fr.userAnswer && (
                         <div className="bg-muted/30 rounded-lg p-3">
                           <div className="text-xs font-medium text-muted-foreground mb-1.5">
-                            Your Answer
+                            Your Method / Answer
                           </div>
                           <p className="text-sm text-foreground whitespace-pre-wrap">
                             {fr.userAnswer}
+                          </p>
+                        </div>
+                      )}
+                      {fr.correctAnswer && (
+                        <div className="bg-muted/30 rounded-lg p-3">
+                          <div className="text-xs font-medium text-muted-foreground mb-1.5">
+                            Correct Answer
+                          </div>
+                          <p className="text-sm text-foreground whitespace-pre-wrap">
+                            {fr.correctAnswer}
                           </p>
                         </div>
                       )}

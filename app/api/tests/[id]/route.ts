@@ -40,6 +40,7 @@ export async function GET(
         frQuestions: (test.frQuestions || []).map(
           (q: Record<string, unknown>) => ({
             ...q,
+            correctAnswer: undefined,
             solution: undefined,
           })
         ),

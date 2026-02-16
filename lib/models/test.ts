@@ -11,6 +11,7 @@ export interface IMCQuestion {
 
 export interface IFRQuestion {
   questionText: string
+  correctAnswer: string
   points: number
   solution: string
   order: number
@@ -40,6 +41,7 @@ const MCQuestionSchema = new Schema<IMCQuestion>({
 
 const FRQuestionSchema = new Schema<IFRQuestion>({
   questionText: { type: String, default: "" },
+  correctAnswer: { type: String, default: "" },
   points: { type: Number, default: 5 },
   solution: { type: String, default: "" },
   order: { type: Number, default: 0 },

@@ -58,23 +58,34 @@ export async function POST(request: NextRequest) {
       }
     )
 
-    // FR questions are not auto-graded
+    // Grade FR questions by exact match against configured correctAnswer
+    let frScore = 0
     const frResults = (test.frQuestions || []).map(
       (
         q: {
           questionText: string
+          correctAnswer: string
           points: number
           solution: string
           order: number
         },
         i: number
       ) => {
+        const userAnswer = frAnswers?.[i] || ""
+        const correctAnswer = q.correctAnswer || ""
+        const isCorrect =
+          correctAnswer.length > 0 && userAnswer === correctAnswer
+        const earnedPoints = isCorrect ? q.points || 1 : 0
+        frScore += earnedPoints
+
         return {
           questionIndex: i,
           questionText: q.questionText,
-          userAnswer: frAnswers?.[i] || "",
+          userAnswer,
+          correctAnswer,
+          isCorrect,
           points: q.points || 1,
-          earnedPoints: 0,
+          earnedPoints,
           solution: q.solution || "",
         }
       }
@@ -97,7 +108,7 @@ export async function POST(request: NextRequest) {
       mcScore,
       totalMCPoints,
       totalFRPoints,
-      totalScore: mcScore,
+      totalScore: mcScore + frScore,
       totalPossible: totalMCPoints + totalFRPoints,
       startedAt: startedAt ? new Date(startedAt) : new Date(),
       submittedAt: new Date(),

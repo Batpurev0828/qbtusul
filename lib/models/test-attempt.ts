@@ -16,6 +16,8 @@ export interface IFRAnswerResult {
   questionIndex: number
   questionText: string
   userAnswer: string
+  correctAnswer: string
+  isCorrect: boolean
   points: number
   earnedPoints: number
   solution: string
@@ -52,6 +54,8 @@ const FRAnswerResultSchema = new Schema<IFRAnswerResult>({
   questionIndex: Number,
   questionText: String,
   userAnswer: { type: String, default: "" },
+  correctAnswer: { type: String, default: "" },
+  isCorrect: { type: Boolean, default: false },
   points: Number,
   earnedPoints: { type: Number, default: 0 },
   solution: { type: String, default: "" },

@@ -17,6 +17,7 @@ interface AttemptSummary {
     subject: string
   }
   mcScore: number
+  totalScore: number
   totalMCPoints: number
   totalFRPoints: number
   totalPossible: number
@@ -95,10 +96,10 @@ export default function MyAttemptsPage() {
         {attempts && attempts.length > 0 && (
           <div className="flex flex-col gap-3">
             {attempts.map((attempt) => {
-              const mcPercentage =
-                attempt.totalMCPoints > 0
+              const totalPercentage =
+                attempt.totalPossible > 0
                   ? Math.round(
-                      (attempt.mcScore / attempt.totalMCPoints) * 100
+                      (attempt.totalScore / attempt.totalPossible) * 100
                     )
                   : 0
               const duration = Math.round(
@@ -117,14 +118,14 @@ export default function MyAttemptsPage() {
                 >
                   <div
                     className={`h-12 w-12 rounded-xl flex items-center justify-center text-sm font-bold shrink-0 ${
-                      mcPercentage >= 70
+                      totalPercentage >= 70
                         ? "bg-green-100 text-green-700"
-                        : mcPercentage >= 40
+                        : totalPercentage >= 40
                           ? "bg-yellow-100 text-yellow-700"
                           : "bg-red-100 text-red-700"
                     }`}
                   >
-                    {mcPercentage}%
+                    {totalPercentage}%
                   </div>
 
                   <div className="flex-1 min-w-0">
@@ -134,7 +135,7 @@ export default function MyAttemptsPage() {
                     <div className="flex flex-wrap gap-3 mt-1 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Award className="h-3 w-3" />
-                        {attempt.mcScore}/{attempt.totalMCPoints} MC pts
+                        {attempt.totalScore}/{attempt.totalPossible} total pts
                       </span>
                       <span className="flex items-center gap-1">
                         <FileText className="h-3 w-3" />
