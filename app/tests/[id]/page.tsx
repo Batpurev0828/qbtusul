@@ -15,9 +15,11 @@ import {
 
 interface TestDetail {
   _id: string
-  year: number
+  tag: string
   subject: string
+  summary?: string
   title: string
+  description?: string
   timeLimitMinutes: number
   mcQuestions: { questionText: string; points: number }[]
   frQuestions: { questionText: string; points: number }[]
@@ -72,7 +74,7 @@ export default function TestDetailPage() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-sm bg-primary/10 text-primary px-2.5 py-0.5 rounded-md font-medium">
-                  {test.year}
+                  {test.tag}
                 </span>
                 <span className="text-sm text-muted-foreground">
                   {test.subject}
@@ -81,6 +83,11 @@ export default function TestDetailPage() {
               <h1 className="text-3xl font-bold text-foreground text-balance">
                 {test.title}
               </h1>
+              {test.description && (
+                <p className="mt-2 text-base text-muted-foreground">
+                  {test.description}
+                </p>
+              )}
             </div>
 
             <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-4">
@@ -94,7 +101,9 @@ export default function TestDetailPage() {
                     </span>
                   </div>
                   <span className="text-lg font-bold text-foreground">
-                    {test.timeLimitMinutes} min
+                    {test.timeLimitMinutes > 0
+                      ? `${test.timeLimitMinutes} min`
+                      : "Unlimited"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
@@ -137,8 +146,9 @@ export default function TestDetailPage() {
               <h2 className="font-semibold text-foreground">Before you start</h2>
               <ul className="text-sm text-muted-foreground flex flex-col gap-2 leading-relaxed">
                 <li>
-                  - The timer will start as soon as you click "Start Test" and
-                  the test will auto-submit when time runs out.
+                  - {test.timeLimitMinutes > 0
+                    ? 'The timer will start as soon as you click "Start Test" and the test will auto-submit when time runs out.'
+                    : "This test has unlimited time and will not auto-submit."}
                 </li>
                 <li>
                   - Multiple choice questions will be auto-graded immediately.

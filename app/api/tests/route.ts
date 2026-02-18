@@ -3,20 +3,34 @@ import { connectDB } from "@/lib/db"
 import Test from "@/lib/models/test"
 import { verifyToken } from "@/lib/auth"
 
+const TAG_PATTERN = /^[A-Za-z0-9_-]+$/
+
+function normalizeTag(value: unknown): string {
+  return typeof value === "string" ? value.trim() : ""
+}
+
 // GET all tests (public - but only basic info)
 export async function GET() {
   try {
     await connectDB()
     const tests = await Test.find({ published: true })
-      .select("year subject title timeLimitMinutes mcQuestions frQuestions")
-      .sort({ year: -1 })
+      .select(
+        "tag year subject title summary description timeLimitMinutes mcQuestions frQuestions"
+      )
+      .sort({ createdAt: -1 })
       .lean()
 
     const testsWithCounts = tests.map((t) => ({
       _id: t._id,
-      year: t.year,
+      tag:
+        (typeof t.tag === "string" && t.tag) ||
+        (typeof (t as { year?: number }).year === "number"
+          ? String((t as { year?: number }).year)
+          : "untagged"),
       subject: t.subject,
       title: t.title,
+      summary: t.summary || t.description || "",
+      description: t.description || "",
       timeLimitMinutes: t.timeLimitMinutes,
       mcQuestionCount: Array.isArray(t.mcQuestions) ? t.mcQuestions.length : 0,
       frQuestionCount: Array.isArray(t.frQuestions) ? t.frQuestions.length : 0,
@@ -60,12 +74,24 @@ export async function POST(request: NextRequest) {
 
     await connectDB()
     const body = await request.json()
+    const candidateTag =
+      normalizeTag(body.tag) ||
+      (typeof body.year === "number" ? String(body.year) : "")
+
+    if (!candidateTag || !TAG_PATTERN.test(candidateTag)) {
+      return NextResponse.json(
+        { error: "Tag is required and must contain only letters, numbers, _ or -" },
+        { status: 400 }
+      )
+    }
 
     const test = await Test.create({
-      year: body.year,
+      tag: candidateTag,
       subject: body.subject || "General",
-      title: body.title || `GEE ${body.year}`,
-      timeLimitMinutes: body.timeLimitMinutes || 120,
+      title: body.title || `GEE ${body.tag || body.year || "Test"}`,
+      summary: body.summary || "",
+      description: body.description || "",
+      timeLimitMinutes: body.timeLimitMinutes ?? 120,
       mcQuestions: body.mcQuestions || [],
       frQuestions: body.frQuestions || [],
       published: body.published ?? false,

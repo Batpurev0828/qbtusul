@@ -13,7 +13,7 @@ interface AttemptSummary {
   testId: {
     _id: string
     title: string
-    year: number
+    tag: string
     subject: string
   }
   mcScore: number

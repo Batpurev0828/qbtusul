@@ -13,6 +13,7 @@ export const loginSchema = z.object({
 
 export const mcQuestionSchema = z.object({
   questionText: z.string().default(""),
+  description: z.string().default(""),
   options: z.array(z.string()).min(2).default(["", "", "", ""]),
   correctAnswer: z.number().int().min(0).default(0),
   points: z.number().min(0).default(1),
@@ -22,6 +23,7 @@ export const mcQuestionSchema = z.object({
 
 export const frQuestionSchema = z.object({
   questionText: z.string().default(""),
+  description: z.string().default(""),
   correctAnswer: z.string().default(""),
   points: z.number().min(0).default(5),
   solution: z.string().default(""),
@@ -29,10 +31,17 @@ export const frQuestionSchema = z.object({
 })
 
 export const testSchema = z.object({
-  year: z.number().int().min(1990).max(2100),
+  tag: z
+    .string()
+    .trim()
+    .min(1, "Tag is required")
+    .max(50)
+    .regex(/^[A-Za-z0-9_-]+$/, "Tag can only include letters, numbers, _ or -"),
   title: z.string().min(1, "Title is required").max(200),
+  summary: z.string().default(""),
+  description: z.string().default(""),
   subject: z.string().default("General"),
-  timeLimitMinutes: z.number().int().min(1).max(600).default(120),
+  timeLimitMinutes: z.number().int().min(0).max(600).default(120),
   mcQuestions: z.array(mcQuestionSchema).default([]),
   frQuestions: z.array(frQuestionSchema).default([]),
   published: z.boolean().default(false),

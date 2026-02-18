@@ -21,7 +21,7 @@ export async function GET(
 
     await connectDB()
     const attempt = await TestAttempt.findById(id)
-      .populate("testId", "title year subject timeLimitMinutes")
+      .populate("testId", "title tag subject timeLimitMinutes")
       .lean()
 
     if (!attempt) {

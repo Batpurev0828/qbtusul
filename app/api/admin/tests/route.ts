@@ -19,16 +19,22 @@ export async function GET(request: NextRequest) {
     await connectDB()
     const tests = await Test.find()
       .select(
-        "year subject title timeLimitMinutes published mcQuestions frQuestions"
+        "tag year subject title summary description timeLimitMinutes published mcQuestions frQuestions"
       )
-      .sort({ year: -1 })
+      .sort({ createdAt: -1 })
       .lean()
 
     const testsWithCounts = tests.map((t) => ({
       _id: t._id,
-      year: t.year,
+      tag:
+        (typeof t.tag === "string" && t.tag) ||
+        (typeof (t as { year?: number }).year === "number"
+          ? String((t as { year?: number }).year)
+          : "untagged"),
       subject: t.subject,
       title: t.title,
+      summary: t.summary || t.description || "",
+      description: t.description || "",
       timeLimitMinutes: t.timeLimitMinutes,
       published: t.published,
       mcQuestionCount: Array.isArray(t.mcQuestions) ? t.mcQuestions.length : 0,

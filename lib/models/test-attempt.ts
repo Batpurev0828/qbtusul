@@ -3,6 +3,7 @@ import mongoose, { Schema, type Document, type Model } from "mongoose"
 export interface IMCAnswerResult {
   questionIndex: number
   questionText: string
+  description: string
   options: string[]
   userAnswer: number
   correctAnswer: number
@@ -15,6 +16,7 @@ export interface IMCAnswerResult {
 export interface IFRAnswerResult {
   questionIndex: number
   questionText: string
+  description: string
   userAnswer: string
   correctAnswer: string
   isCorrect: boolean
@@ -41,6 +43,7 @@ export interface ITestAttempt extends Document {
 const MCAnswerResultSchema = new Schema<IMCAnswerResult>({
   questionIndex: Number,
   questionText: String,
+  description: { type: String, default: "" },
   options: [String],
   userAnswer: { type: Number, default: -1 },
   correctAnswer: Number,
@@ -53,6 +56,7 @@ const MCAnswerResultSchema = new Schema<IMCAnswerResult>({
 const FRAnswerResultSchema = new Schema<IFRAnswerResult>({
   questionIndex: Number,
   questionText: String,
+  description: { type: String, default: "" },
   userAnswer: { type: String, default: "" },
   correctAnswer: { type: String, default: "" },
   isCorrect: { type: Boolean, default: false },

@@ -4,7 +4,6 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
-import rehypeRaw from "rehype-raw"
 
 
 export function MarkdownRenderer({
@@ -18,7 +17,7 @@ export function MarkdownRenderer({
     <div className={className}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeKatex, rehypeRaw]}
+        rehypePlugins={[rehypeKatex]}
         components={{
           img: ({ ...props }) => (
             <img

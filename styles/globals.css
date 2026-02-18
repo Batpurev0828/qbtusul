@@ -12,6 +12,14 @@ body {
   }
 }
 
+.katex-display {
+  text-align: center;
+}
+.katex-display > .katex {
+  margin: 0 auto;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;

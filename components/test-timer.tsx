@@ -15,6 +15,7 @@ export function TestTimer({
   onTimeUp,
 }: TestTimerProps) {
   const [secondsLeft, setSecondsLeft] = useState(() => {
+    if (durationMinutes <= 0) return 0
     const elapsed = Math.floor(
       (Date.now() - new Date(startedAt).getTime()) / 1000
     )
@@ -26,6 +27,7 @@ export function TestTimer({
   }, [onTimeUp])
 
   useEffect(() => {
+    if (durationMinutes <= 0) return
     if (secondsLeft <= 0) {
       handleTimeUp()
       return
@@ -43,6 +45,14 @@ export function TestTimer({
 
     return () => clearInterval(interval)
   }, [secondsLeft, handleTimeUp])
+
+  if (durationMinutes <= 0) {
+    return (
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg font-mono text-sm font-bold bg-muted text-foreground">
+        Unlimited
+      </div>
+    )
+  }
 
   const minutes = Math.floor(secondsLeft / 60)
   const seconds = secondsLeft % 60

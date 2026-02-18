@@ -2,6 +2,7 @@ import mongoose, { Schema, type Document, type Model } from "mongoose"
 
 export interface IMCQuestion {
   questionText: string
+  description: string
   options: string[]
   correctAnswer: number
   points: number
@@ -11,6 +12,7 @@ export interface IMCQuestion {
 
 export interface IFRQuestion {
   questionText: string
+  description: string
   correctAnswer: string
   points: number
   solution: string
@@ -19,9 +21,11 @@ export interface IFRQuestion {
 
 export interface ITest extends Document {
   _id: mongoose.Types.ObjectId
-  year: number
+  tag: string
   subject: string
   title: string
+  summary: string
+  description: string
   timeLimitMinutes: number
   mcQuestions: IMCQuestion[]
   frQuestions: IFRQuestion[]
@@ -32,6 +36,7 @@ export interface ITest extends Document {
 
 const MCQuestionSchema = new Schema<IMCQuestion>({
   questionText: { type: String, default: "" },
+  description: { type: String, default: "" },
   options: [{ type: String }],
   correctAnswer: { type: Number, default: 0 },
   points: { type: Number, default: 1 },
@@ -41,6 +46,7 @@ const MCQuestionSchema = new Schema<IMCQuestion>({
 
 const FRQuestionSchema = new Schema<IFRQuestion>({
   questionText: { type: String, default: "" },
+  description: { type: String, default: "" },
   correctAnswer: { type: String, default: "" },
   points: { type: Number, default: 5 },
   solution: { type: String, default: "" },
@@ -49,9 +55,11 @@ const FRQuestionSchema = new Schema<IFRQuestion>({
 
 const TestSchema = new Schema<ITest>(
   {
-    year: { type: Number, required: true },
+    tag: { type: String, required: true, trim: true },
     subject: { type: String, default: "General" },
     title: { type: String, required: true, trim: true },
+    summary: { type: String, default: "" },
+    description: { type: String, default: "" },
     timeLimitMinutes: { type: Number, default: 120 },
     mcQuestions: [MCQuestionSchema],
     frQuestions: [FRQuestionSchema],
@@ -60,7 +68,7 @@ const TestSchema = new Schema<ITest>(
   { timestamps: true }
 )
 
-TestSchema.index({ year: -1 })
+TestSchema.index({ tag: 1 })
 TestSchema.index({ published: 1 })
 
 const Test: Model<ITest> =

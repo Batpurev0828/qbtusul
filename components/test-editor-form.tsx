@@ -12,9 +12,12 @@ import { Plus, Save, Loader2 } from "lucide-react"
 interface TestEditorFormProps {
   initialData?: {
     _id?: string
-    year: number
+    tag?: string
+    year?: number
     subject: string
     title: string
+    summary?: string
+    description?: string
     timeLimitMinutes: number
     mcQuestions: MCQuestion[]
     frQuestions: FRQuestion[]
@@ -28,13 +31,23 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState("")
 
-  const [year, setYear] = useState(initialData?.year || new Date().getFullYear())
+  const [tag, setTag] = useState(
+    initialData?.tag ||
+      (typeof initialData?.year === "number"
+        ? String(initialData.year)
+        : new Date().getFullYear().toString())
+  )
   const [subject, setSubject] = useState(initialData?.subject || "General")
   const [title, setTitle] = useState(
     initialData?.title || `GEE ${new Date().getFullYear()}`
   )
+  const [summary, setSummary] = useState(initialData?.summary || "")
+  const [description, setDescription] = useState(initialData?.description || "")
   const [timeLimitMinutes, setTimeLimitMinutes] = useState(
-    initialData?.timeLimitMinutes || 120
+    initialData?.timeLimitMinutes ?? 120
+  )
+  const [unlimitedTime, setUnlimitedTime] = useState(
+    (initialData?.timeLimitMinutes ?? 120) <= 0
   )
   const [published, setPublished] = useState(initialData?.published || false)
   const [mcQuestions, setMcQuestions] = useState<MCQuestion[]>(
@@ -49,6 +62,7 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
       ...prev,
       {
         questionText: "",
+        description: "",
         options: ["", "", "", "", ""],
         correctAnswer: 0,
         points: 1,
@@ -63,6 +77,7 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
       ...prev,
       {
         questionText: "",
+        description: "",
         correctAnswer: "",
         points: 5,
         solution: "",
@@ -120,10 +135,12 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
     setSaving(true)
 
     const payload = {
-      year,
+      tag: tag.trim(),
       subject,
       title,
-      timeLimitMinutes,
+      summary,
+      description,
+      timeLimitMinutes: unlimitedTime ? 0 : timeLimitMinutes,
       published,
       mcQuestions,
       frQuestions,
@@ -180,14 +197,43 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
               className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
           </div>
-          <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-foreground">Year</label>
-            <input
-              type="number"
-              value={year}
-              onChange={(e) => setYear(parseInt(e.target.value) || 2024)}
-              className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          <div className="flex flex-col gap-1.5 sm:col-span-2">
+            <label className="text-sm font-medium text-foreground">
+              Summary
+            </label>
+            <textarea
+              value={summary}
+              onChange={(e) => setSummary(e.target.value)}
+              rows={2}
+              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y"
+              placeholder='Short quote-style summary shown only on /tests.'
             />
+          </div>
+          <div className="flex flex-col gap-1.5 sm:col-span-2">
+            <label className="text-sm font-medium text-foreground">
+              Description
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={2}
+              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y"
+              placeholder='Example: "20 handpicked integrals solved using various techniques ranging from easy to hard."'
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-foreground">Tag</label>
+            <input
+              type="text"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+              className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder="e.g. 2026, extra, bin"
+              pattern="[A-Za-z0-9_-]+"
+            />
+            <p className="text-xs text-muted-foreground">
+              One tag only. Allowed: letters, numbers, `_`, `-`.
+            </p>
           </div>
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-foreground">
@@ -206,13 +252,28 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
             </label>
             <input
               type="number"
-              min={1}
+              min={0}
+              disabled={unlimitedTime}
               value={timeLimitMinutes}
               onChange={(e) =>
-                setTimeLimitMinutes(parseInt(e.target.value) || 120)
+                setTimeLimitMinutes(parseInt(e.target.value) || 0)
               }
               className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
             />
+            <label className="inline-flex items-center gap-2 text-sm text-foreground">
+              <input
+                type="checkbox"
+                checked={unlimitedTime}
+                onChange={(e) => {
+                  const isUnlimited = e.target.checked
+                  setUnlimitedTime(isUnlimited)
+                  if (isUnlimited) setTimeLimitMinutes(0)
+                  else if (timeLimitMinutes <= 0) setTimeLimitMinutes(120)
+                }}
+                className="h-4 w-4 rounded border-input text-primary focus:ring-ring"
+              />
+              Unlimited time
+            </label>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -238,14 +299,6 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
               ({mcQuestions.length} questions, {totalMCPoints} pts)
             </span>
           </h2>
-          <button
-            type="button"
-            onClick={addMCQuestion}
-            className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-          >
-            <Plus className="h-4 w-4" />
-            Add MC
-          </button>
         </div>
         {mcQuestions.length === 0 && (
           <p className="text-sm text-muted-foreground py-4 text-center">
@@ -265,6 +318,16 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
             onMoveDown={() => moveMC(i, "down")}
           />
         ))}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={addMCQuestion}
+            className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+          >
+            <Plus className="h-4 w-4" />
+            Add MC
+          </button>
+        </div>
       </section>
 
       {/* FR Questions */}
@@ -276,14 +339,6 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
               ({frQuestions.length} questions, {totalFRPoints} pts)
             </span>
           </h2>
-          <button
-            type="button"
-            onClick={addFRQuestion}
-            className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-          >
-            <Plus className="h-4 w-4" />
-            Add FR
-          </button>
         </div>
         {frQuestions.length === 0 && (
           <p className="text-sm text-muted-foreground py-4 text-center">
@@ -303,6 +358,16 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
             onMoveDown={() => moveFR(i, "down")}
           />
         ))}
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={addFRQuestion}
+            className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+          >
+            <Plus className="h-4 w-4" />
+            Add FR
+          </button>
+        </div>
       </section>
 
       {/* Summary + Save */}

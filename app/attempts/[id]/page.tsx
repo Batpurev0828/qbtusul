@@ -1,7 +1,6 @@
 "use client"
 
 import { Navbar } from "@/components/navbar"
-import { KaTeXRenderer } from "@/components/katex-renderer"
 import { useAuth } from "@/components/auth-provider"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -16,10 +15,12 @@ import {
   Clock,
   ChevronDown,
 } from "lucide-react"
+import { MarkdownRenderer } from "@/components/markdown-renderer"
 
 interface MCResult {
   questionIndex: number
   questionText: string
+  description: string
   options: string[]
   userAnswer: number
   correctAnswer: number
@@ -32,6 +33,7 @@ interface MCResult {
 interface FRResult {
   questionIndex: number
   questionText: string
+  description: string
   userAnswer: string
   correctAnswer: string
   isCorrect: boolean
@@ -45,7 +47,7 @@ interface AttemptData {
   testId: {
     _id: string
     title: string
-    year: number
+    tag: string
     subject: string
     timeLimitMinutes: number
   }
@@ -153,7 +155,7 @@ export default function AttemptDetailPage() {
                 Score Report
               </h1>
               <p className="text-muted-foreground mt-1">
-                {attempt.testId.title} ({attempt.testId.year})
+                {attempt.testId.title} ({attempt.testId.tag})
               </p>
             </div>
             <div className="text-right">
@@ -249,10 +251,16 @@ export default function AttemptDetailPage() {
                   </button>
                   {expandedMC.has(i) && (
                     <div className="px-4 pb-4 flex flex-col gap-3 border-t border-border pt-3">
-                      <KaTeXRenderer
+                      <MarkdownRenderer
                         content={mc.questionText}
                         className="text-sm text-foreground leading-relaxed"
                       />
+                      {mc.description && (
+                        <MarkdownRenderer
+                          content={mc.description}
+                          className="text-sm text-muted-foreground leading-relaxed bg-muted/30 rounded-lg p-3"
+                        />
+                      )}
                       <div className="flex flex-col gap-1.5">
                         {mc.options.map((opt, oi) => {
                           const isUserAnswer = mc.userAnswer === oi
@@ -279,7 +287,7 @@ export default function AttemptDetailPage() {
                               >
                                 {String.fromCharCode(65 + oi)}
                               </span>
-                              <KaTeXRenderer
+                              <MarkdownRenderer
                                 content={opt}
                                 className="flex-1 text-foreground"
                               />
@@ -302,7 +310,7 @@ export default function AttemptDetailPage() {
                           <div className="text-xs font-medium text-primary mb-1.5">
                             Solution
                           </div>
-                          <KaTeXRenderer
+                          <MarkdownRenderer
                             content={mc.solution}
                             className="text-sm text-foreground leading-relaxed"
                           />
@@ -351,10 +359,16 @@ export default function AttemptDetailPage() {
                   </button>
                   {expandedFR.has(i) && (
                     <div className="px-4 pb-4 flex flex-col gap-3 border-t border-border pt-3">
-                      <KaTeXRenderer
+                      <MarkdownRenderer
                         content={fr.questionText}
                         className="text-sm text-foreground leading-relaxed"
                       />
+                      {fr.description && (
+                        <MarkdownRenderer
+                          content={fr.description}
+                          className="text-sm text-muted-foreground leading-relaxed bg-muted/30 rounded-lg p-3"
+                        />
+                      )}
                       {fr.userAnswer && (
                         <div className="bg-muted/30 rounded-lg p-3">
                           <div className="text-xs font-medium text-muted-foreground mb-1.5">
@@ -380,7 +394,7 @@ export default function AttemptDetailPage() {
                           <div className="text-xs font-medium text-primary mb-1.5">
                             Solution
                           </div>
-                          <KaTeXRenderer
+                          <MarkdownRenderer
                             content={fr.solution}
                             className="text-sm text-foreground leading-relaxed"
                           />

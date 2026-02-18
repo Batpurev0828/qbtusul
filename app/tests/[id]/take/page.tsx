@@ -16,6 +16,7 @@ import { MarkdownRenderer } from "@/components/markdown-renderer"
 
 interface MCQ {
   questionText: string
+  description: string
   options: string[]
   points: number
   order: number
@@ -23,6 +24,7 @@ interface MCQ {
 
 interface FRQ {
   questionText: string
+  description: string
   points: number
   order: number
 }
@@ -30,7 +32,9 @@ interface FRQ {
 interface TestData {
   _id: string
   title: string
-  year: number
+  summary?: string
+  description?: string
+  tag: string
   subject: string
   timeLimitMinutes: number
   mcQuestions: MCQ[]
@@ -133,9 +137,11 @@ export default function TakeTestPage() {
       <header className="sticky top-0 z-50 bg-card border-b border-border px-4 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="font-semibold text-foreground text-sm sm:text-base truncate">
-              {test.title}
-            </h1>
+            <div className="min-w-0">
+              <h1 className="font-semibold text-foreground text-sm sm:text-base truncate">
+                {test.title}
+              </h1>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <TestTimer
@@ -249,6 +255,11 @@ export default function TakeTestPage() {
               /> */}
 
               <MarkdownRenderer content={currentQ.questionText} className="text-foreground leading-relaxed"/>
+              {currentQ.description && (
+                <div className="bg-muted/30 rounded-lg p-3 text-sm text-muted-foreground">
+                  <MarkdownRenderer content={currentQ.description} />
+                </div>
+              )}
 
               {/* MC options */}
               {currentSection === "mc" && "options" in currentQ && (

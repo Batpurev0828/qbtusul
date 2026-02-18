@@ -3,6 +3,8 @@ import { connectDB } from "@/lib/db"
 import Test from "@/lib/models/test"
 import { verifyToken } from "@/lib/auth"
 
+const TAG_PATTERN = /^[A-Za-z0-9_-]+$/
+
 // GET single test
 export async function GET(
   request: NextRequest,
@@ -77,6 +79,19 @@ export async function PUT(
 
     await connectDB()
     const body = await request.json()
+    if ("tag" in body) {
+      const tag = typeof body.tag === "string" ? body.tag.trim() : ""
+      if (!tag || !TAG_PATTERN.test(tag)) {
+        return NextResponse.json(
+          {
+            error:
+              "Tag is required and must contain only letters, numbers, _ or -",
+          },
+          { status: 400 }
+        )
+      }
+      body.tag = tag
+    }
 
     const test = await Test.findByIdAndUpdate(id, body, {
       new: true,

@@ -46,7 +46,14 @@
 
 /* KaTeX custom sizing */
 .katex-display {
+  display: block !important;
+  text-align: center !important;
   margin: 0.5em 0 !important;
+}
+
+.katex-display > .katex {
+  display: inline-block;
+  text-align: left;
 }
 
 .katex {

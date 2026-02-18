@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
       (
         q: {
           questionText: string
+          description: string
           options: string[]
           correctAnswer: number
           points: number
@@ -47,6 +48,7 @@ export async function POST(request: NextRequest) {
         return {
           questionIndex: i,
           questionText: q.questionText,
+          description: q.description || "",
           options: q.options,
           userAnswer,
           correctAnswer: q.correctAnswer,
@@ -64,6 +66,7 @@ export async function POST(request: NextRequest) {
       (
         q: {
           questionText: string
+          description: string
           correctAnswer: string
           points: number
           solution: string
@@ -81,6 +84,7 @@ export async function POST(request: NextRequest) {
         return {
           questionIndex: i,
           questionText: q.questionText,
+          description: q.description || "",
           userAnswer,
           correctAnswer,
           isCorrect,
@@ -139,7 +143,7 @@ export async function GET(request: NextRequest) {
 
     await connectDB()
     const attempts = await TestAttempt.find({ userId: payload.userId })
-      .populate("testId", "title year subject")
+      .populate("testId", "title tag subject")
       .sort({ submittedAt: -1 })
       .lean()
 
