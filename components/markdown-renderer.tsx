@@ -5,6 +5,16 @@ import remarkGfm from "remark-gfm"
 import remarkMath from "remark-math"
 import rehypeKatex from "rehype-katex"
 
+function normalizeDisplayMath(content: string): string {
+  return content.replace(
+    /(^|\n)([ \t]*)\$\$([^\n]*?)\$\$([ \t]*)(?=\n|$)/g,
+    (full, lineStart: string, indent: string, expr: string, trailing: string) => {
+      const trimmedExpr = expr.trim()
+      if (!trimmedExpr) return full
+      return `${lineStart}${indent}$$\n${indent}${trimmedExpr}\n${indent}$$${trailing}`
+    }
+  )
+}
 
 export function MarkdownRenderer({
   content,
@@ -51,7 +61,7 @@ export function MarkdownRenderer({
           },
         }}
       >
-        {content}
+        {normalizeDisplayMath(content)}
       </ReactMarkdown>
     </div>
   )

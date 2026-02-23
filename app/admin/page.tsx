@@ -8,6 +8,7 @@ import useSWR from "swr"
 import Link from "next/link"
 import {
   Plus,
+  PenSquare,
   Edit,
   Trash2,
   Eye,
@@ -112,13 +113,22 @@ export default function AdminPage() {
               Manage tests
             </p>
           </div>
-          <Link
-            href="/admin/tests/new"
-            className="inline-flex items-center gap-2 h-10 px-4 bg-primary text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity"
-          >
-            <Plus className="h-4 w-4" />
-            New Test
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/markdown-editor"
+              className="inline-flex items-center gap-2 h-10 px-4 border border-input bg-background text-foreground font-medium rounded-lg text-sm hover:bg-muted transition-colors"
+            >
+              <PenSquare className="h-4 w-4" />
+              Markdown + KaTeX Editor
+            </Link>
+            <Link
+              href="/admin/tests/new"
+              className="inline-flex items-center gap-2 h-10 px-4 bg-primary text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity"
+            >
+              <Plus className="h-4 w-4" />
+              New Test
+            </Link>
+          </div>
         </div>
 
         <div className="mb-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
