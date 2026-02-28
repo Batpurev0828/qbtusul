@@ -56,8 +56,9 @@ export function QuestionEditor({
   onMoveDown,
 }: QuestionEditorProps) {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [showPreview, setShowPreview] = useState(false)
-  const [showSolutionPreview, setShowSolutionPreview] = useState(false)
+  const [showPreview, setShowPreview] = useState(true)
+  const [showSolutionPreview, setShowSolutionPreview] = useState(true)
+  const [showChoicesPreview, setShowChoicesPreview] = useState(true)
   const [uploading, setUploading] = useState(false)
 
   const handleImageUpload = useCallback(
@@ -100,10 +101,10 @@ export function QuestionEditor({
   const questionPreview = (question.questionText || "").trim()
 
   return (
-    <div className="bg-card border border-border rounded-xl p-4 flex flex-col gap-4">
+    <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-5">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setIsCollapsed((prev) => !prev)}
@@ -120,6 +121,27 @@ export function QuestionEditor({
           <span className="text-sm text-muted-foreground">
             Order: {question.order}
           </span>
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor={`points-${type}-${index}`}
+              className="text-sm text-muted-foreground"
+            >
+              Points:
+            </label>
+            <input
+              id={`points-${type}-${index}`}
+              type="number"
+              min={1}
+              value={question.points}
+              onChange={(e) =>
+                onUpdate({
+                  ...question,
+                  points: parseInt(e.target.value) || 1,
+                } as MCQuestion | FRQuestion)
+              }
+              className="h-8 w-20 px-2 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
         </div>
         <div className="flex items-center gap-1">
           <button
@@ -159,23 +181,6 @@ export function QuestionEditor({
 
       {!isCollapsed && (
         <>
-          {/* Points */}
-          <div className="flex items-center gap-3">
-            <label className="text-sm font-medium text-foreground">Points:</label>
-            <input
-              type="number"
-              min={1}
-              value={question.points}
-              onChange={(e) =>
-                onUpdate({
-                  ...question,
-                  points: parseInt(e.target.value) || 1,
-                } as MCQuestion | FRQuestion)
-              }
-              className="h-8 w-20 px-2 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-            />
-          </div>
-
           {/* Question text */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center justify-between">
@@ -209,29 +214,31 @@ export function QuestionEditor({
                 </button>
               </div>
             </div>
-            <textarea
-              value={question.questionText}
-              onChange={(e) =>
-                onUpdate({
-                  ...question,
-                  questionText: e.target.value,
-                } as MCQuestion | FRQuestion)
-              }
-              rows={4}
-              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
-              placeholder="Enter question text. Use $...$ for inline LaTeX, $$...$$ for display LaTeX."
-            />
-            {showPreview && (
-              <div className="border border-border rounded-lg p-3 bg-muted/30">
-                <div className="text-xs font-medium text-muted-foreground mb-2">
-                  Preview:
+            <div className={`grid gap-3 ${showPreview ? "md:grid-cols-2" : ""}`}>
+              <textarea
+                value={question.questionText}
+                onChange={(e) =>
+                  onUpdate({
+                    ...question,
+                    questionText: e.target.value,
+                  } as MCQuestion | FRQuestion)
+                }
+                rows={4}
+                className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
+                placeholder="Enter question text. Use $...$ for inline LaTeX, $$...$$ for display LaTeX."
+              />
+              {showPreview && (
+                <div className="border border-border rounded-lg p-3 bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground mb-2">
+                    Preview:
+                  </div>
+                  <MarkdownRenderer
+                    content={question.questionText}
+                    className="text-sm text-foreground leading-relaxed"
+                  />
                 </div>
-                <MarkdownRenderer
-                  content={question.questionText}
-                  className="text-sm text-foreground leading-relaxed"
-                />
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {/* Question description */}
@@ -261,20 +268,36 @@ export function QuestionEditor({
                 <label className="text-sm font-medium text-foreground">
                   Options
                 </label>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const updated = { ...mcQ, options: [...mcQ.options, ""] }
-                    onUpdate(updated)
-                  }}
-                  className="text-xs text-primary hover:underline flex items-center gap-1"
-                >
-                  <Plus className="h-3 w-3" />
-                  Add option
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowChoicesPreview(!showChoicesPreview)}
+                    className="p-1.5 text-muted-foreground hover:text-foreground rounded-md hover:bg-muted"
+                    title={
+                      showChoicesPreview ? "Hide choices preview" : "Show choices preview"
+                    }
+                  >
+                    {showChoicesPreview ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const updated = { ...mcQ, options: [...mcQ.options, ""] }
+                      onUpdate(updated)
+                    }}
+                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add option
+                  </button>
+                </div>
               </div>
               {mcQ.options.map((opt, oi) => (
-                <div key={oi} className="flex items-center gap-2">
+                <div key={oi} className="flex items-start gap-2">
                   <button
                     type="button"
                     onClick={() =>
@@ -288,17 +311,29 @@ export function QuestionEditor({
                   >
                     {String.fromCharCode(65 + oi)}
                   </button>
-                  <input
-                    type="text"
-                    value={opt}
-                    onChange={(e) => {
-                      const newOpts = [...mcQ.options]
-                      newOpts[oi] = e.target.value
-                      onUpdate({ ...mcQ, options: newOpts } as MCQuestion)
-                    }}
-                    className="flex-1 h-8 px-2 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                    placeholder={`Option ${String.fromCharCode(65 + oi)}`}
-                  />
+                  <div
+                    className={`flex-1 grid gap-2 ${showChoicesPreview ? "md:grid-cols-2" : ""}`}
+                  >
+                    <input
+                      type="text"
+                      value={opt}
+                      onChange={(e) => {
+                        const newOpts = [...mcQ.options]
+                        newOpts[oi] = e.target.value
+                        onUpdate({ ...mcQ, options: newOpts } as MCQuestion)
+                      }}
+                      className="w-full h-8 px-3 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                      placeholder={`Option ${String.fromCharCode(65 + oi)}`}
+                    />
+                    {showChoicesPreview && (
+                      <div className="min-h-8 border border-border rounded-md px-2 py-1 bg-muted/30">
+                        <MarkdownRenderer
+                          content={opt}
+                          className="text-sm text-foreground leading-relaxed"
+                        />
+                      </div>
+                    )}
+                  </div>
                   {mcQ.options.length > 2 && (
                     <button
                       type="button"
@@ -387,29 +422,31 @@ export function QuestionEditor({
                 </button>
               </div>
             </div>
-            <textarea
-              value={question.solution}
-              onChange={(e) =>
-                onUpdate({
-                  ...question,
-                  solution: e.target.value,
-                } as MCQuestion | FRQuestion)
-              }
-              rows={3}
-              className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
-              placeholder="Enter solution (supports LaTeX and images)."
-            />
-            {showSolutionPreview && question.solution && (
-              <div className="border border-border rounded-lg p-3 bg-muted/30">
-                <div className="text-xs font-medium text-muted-foreground mb-2">
-                  Solution preview:
+            <div className={`grid gap-3 ${showSolutionPreview ? "md:grid-cols-2" : ""}`}>
+              <textarea
+                value={question.solution}
+                onChange={(e) =>
+                  onUpdate({
+                    ...question,
+                    solution: e.target.value,
+                  } as MCQuestion | FRQuestion)
+                }
+                rows={3}
+                className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
+                placeholder="Enter solution (supports LaTeX and images)."
+              />
+              {showSolutionPreview && (
+                <div className="border border-border rounded-lg p-3 bg-muted/30">
+                  <div className="text-xs font-medium text-muted-foreground mb-2">
+                    Solution preview:
+                  </div>
+                  <MarkdownRenderer
+                    content={question.solution}
+                    className="text-sm text-foreground leading-relaxed"
+                  />
                 </div>
-                <MarkdownRenderer
-                  content={question.solution}
-                  className="text-sm text-foreground leading-relaxed"
-                />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </>
       )}

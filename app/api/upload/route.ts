@@ -2,6 +2,16 @@ import { put } from "@vercel/blob"
 import { type NextRequest, NextResponse } from "next/server"
 import { verifyToken } from "@/lib/auth"
 
+export const runtime = "nodejs"
+
+function getBlobToken() {
+  return process.env.BLOB_READ_WRITE_TOKEN || process.env.VERCEL_BLOB_READ_WRITE_TOKEN
+}
+
+function sanitizeFilename(filename: string) {
+  return filename.replace(/[^a-zA-Z0-9._-]/g, "-")
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Only admins can upload
@@ -42,8 +52,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const blob = await put(`gee-questions/${Date.now()}-${file.name}`, file, {
+    const blobToken = getBlobToken()
+    if (!blobToken) {
+      return NextResponse.json(
+        {
+          error:
+            "Blob storage is not configured. Add BLOB_READ_WRITE_TOKEN (or VERCEL_BLOB_READ_WRITE_TOKEN) to environment variables.",
+        },
+        { status: 500 }
+      )
+    }
+
+    const safeName = sanitizeFilename(file.name || "upload")
+    const blob = await put(`gee-questions/${Date.now()}-${safeName}`, file, {
       access: "public",
+      token: blobToken,
+      addRandomSuffix: true,
+      contentType: file.type || "application/octet-stream",
     })
 
     return NextResponse.json({
@@ -53,7 +78,14 @@ export async function POST(request: NextRequest) {
       type: file.type,
     })
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown upload error"
     console.error("Upload error:", error)
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: "Upload failed",
+        details: message,
+      },
+      { status: 500 }
+    )
   }
 }

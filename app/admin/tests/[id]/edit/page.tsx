@@ -51,9 +51,9 @@ export default function EditTestPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col w-full items-center">
       <Navbar />
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8">
+      <main className="flex-1 max-w-screen w-full px-36 py-8">
         <Link
           href="/admin"
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6"
@@ -64,7 +64,7 @@ export default function EditTestPage() {
         <h1 className="text-3xl font-bold text-foreground mb-6">
           Edit: {test.title}
         </h1>
-        <TestEditorForm mode="edit" initialData={test} />
+        <TestEditorForm mode="edit" initialData={test}/>
       </main>
     </div>
   )

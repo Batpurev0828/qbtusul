@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 400 300">
+  <!-- Generator: Adobe Illustrator 30.1.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 136)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #231f20;
+        stroke-miterlimit: 10;
+      }
+
+      .st1 {
+        font-size: 6px;
+      }
+
+      .st1, .st2 {
+        fill: #231f20;
+        font-family: MyriadPro-Regular, 'Myriad Pro';
+      }
+
+      .st2 {
+        font-size: 12px;
+      }
+    </style>
+  </defs>
+  <line class="st0" x1="18.14" y1="104.07" x2="118.14" y2="104.07"/>
+  <line class="st0" x1="68.14" y1="121.1" x2="68.14" y2="33.49"/>
+  <text class="st1" transform="translate(115.36 101.07)"><tspan x="0" y="0">x</tspan></text>
+  <text class="st1" transform="translate(73.41 35.25)"><tspan x="0" y="0">y</tspan></text>
+  <path class="st0" d="M23.56,42.77s30.34,168.27,59.75,0"/>
+  <line class="st0" x1="153.75" y1="104.07" x2="253.75" y2="104.07"/>
+  <line class="st0" x1="203.75" y1="121.1" x2="203.75" y2="33.49"/>
+  <text class="st1" transform="translate(250.97 101.07)"><tspan x="0" y="0">x</tspan></text>
+  <text class="st1" transform="translate(209.01 35.25)"><tspan x="0" y="0">y</tspan></text>
+  <path class="st0" d="M185.57,41.35s30.34,168.27,59.75,0"/>
+  <line class="st0" x1="285.94" y1="104.07" x2="385.94" y2="104.07"/>
+  <line class="st0" x1="335.94" y1="121.1" x2="335.94" y2="33.49"/>
+  <text class="st1" transform="translate(383.17 101.07)"><tspan x="0" y="0">x</tspan></text>
+  <text class="st1" transform="translate(341.21 35.25)"><tspan x="0" y="0">y</tspan></text>
+  <path class="st0" d="M304.87,29.29s30.34,168.27,59.75,0"/>
+  <line class="st0" x1="73.46" y1="199.89" x2="173.46" y2="199.89"/>
+  <line class="st0" x1="123.46" y1="256.55" x2="123.46" y2="168.93"/>
+  <text class="st1" transform="translate(129.93 166.77)"><tspan x="0" y="0">y</tspan></text>
+  <path class="st0" d="M166.44,263.3s-30.34-168.27-59.75,0"/>
+  <text class="st1" transform="translate(172.07 194.94)"><tspan x="0" y="0">x</tspan></text>
+  <line class="st0" x1="218.93" y1="199.9" x2="318.93" y2="199.9"/>
+  <line class="st0" x1="268.93" y1="256.55" x2="268.93" y2="168.94"/>
+  <text class="st1" transform="translate(275.4 166.77)"><tspan x="0" y="0">y</tspan></text>
+  <path class="st0" d="M288.11,263.3s-30.34-168.27-59.75,0"/>
+  <text class="st1" transform="translate(317.54 194.94)"><tspan x="0" y="0">x</tspan></text>
+  <text class="st2" transform="translate(21.26 29.29)"><tspan x="0" y="0">A</tspan></text>
+  <text class="st2" transform="translate(155.04 27.6)"><tspan x="0" y="0">B</tspan></text>
+  <text class="st2" transform="translate(289.35 25.88)"><tspan x="0" y="0">C</tspan></text>
+  <text class="st2" transform="translate(77.48 158.73)"><tspan x="0" y="0">D</tspan></text>
+  <text class="st2" transform="translate(245.32 158.73)"><tspan x="0" y="0">E</tspan></text>
+</svg>
