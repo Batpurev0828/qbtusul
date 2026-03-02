@@ -59,9 +59,9 @@ export default function TestsPage() {
       <Navbar />
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8">
         <div className="flex flex-col gap-2 mb-8">
-          <h1 className="text-3xl font-bold text-foreground">Tests</h1>
+          <h1 className="text-3xl font-bold text-foreground">Тестүүд</h1>
           <p className="text-muted-foreground">
-            Choose a test to practice. Multiple choice questions are auto-graded.
+            Тестээ сонгоно уу.
           </p>
         </div>
 
@@ -70,7 +70,7 @@ export default function TestsPage() {
             type="text"
             value={nameFilter}
             onChange={(e) => setNameFilter(e.target.value)}
-            placeholder="Filter by test name"
+            placeholder="Тестийн нэрээр шүүх"
             className="sm:col-span-2 h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           />
           <select
@@ -78,7 +78,7 @@ export default function TestsPage() {
             onChange={(e) => setTagFilter(e.target.value)}
             className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
           >
-            <option value="all">All tags</option>
+            <option value="all">Бүх оны тестүүд</option>
             {allTags.map((tag) => (
               <option key={tag} value={String(tag)}>
                 {tag}
@@ -95,7 +95,7 @@ export default function TestsPage() {
 
         {error && (
           <div className="bg-destructive/10 text-destructive text-sm px-4 py-3 rounded-lg">
-            Failed to load tests. Please try again later.
+            Тестүүдийг ачаалж чадсангүй. Дараа дахин оролдоно уу.
           </div>
         )}
 
@@ -104,8 +104,8 @@ export default function TestsPage() {
             <FileText className="h-12 w-12 text-muted-foreground/50" />
             <p className="text-muted-foreground">
               {(tests || []).length === 0
-                ? "No tests available yet. Check back soon!"
-                : "No tests match the current name/tag filters."}
+                ? "Одоогоор тест алга."
+                : "Одоогийн нэр/шошго шүүлтэд тохирох тест алга."}
             </p>
           </div>
         )}
@@ -144,16 +144,12 @@ export default function TestsPage() {
                       <span className="flex items-center gap-1">
                         <Clock className="h-3.5 w-3.5" />
                         {test.timeLimitMinutes > 0
-                          ? `${test.timeLimitMinutes} min`
-                          : "Unlimited"}
+                          ? `${test.timeLimitMinutes} мин`
+                          : "Хязгааргүй"}
                       </span>
                       <span className="flex items-center gap-1">
                         <FileText className="h-3.5 w-3.5" />
-                        {test.mcQuestionCount} MC + {test.frQuestionCount} FR
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Award className="h-3.5 w-3.5" />
-                        {test.totalPoints} pts
+                        {test.mcQuestionCount} Тест + {test.frQuestionCount} Задгай
                       </span>
                     </div>
                   </Link>

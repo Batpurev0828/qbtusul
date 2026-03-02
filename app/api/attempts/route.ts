@@ -9,12 +9,12 @@ export async function POST(request: NextRequest) {
   try {
     const token = request.cookies.get("gee-auth-token")?.value
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     const payload = await verifyToken(token)
     if (!payload) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     await connectDB()
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     // Fetch the full test with correct answers
     const test = await Test.findById(testId).lean()
     if (!test) {
-      return NextResponse.json({ error: "Test not found" }, { status: 404 })
+      return NextResponse.json({ error: "Тест олдсонгүй" }, { status: 404 })
     }
 
     // Grade MC questions
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error("Error submitting attempt:", error)
     return NextResponse.json(
-      { error: "Failed to submit attempt" },
+      { error: "Оролдлого илгээж чадсангүй" },
       { status: 500 }
     )
   }
@@ -133,12 +133,12 @@ export async function GET(request: NextRequest) {
   try {
     const token = request.cookies.get("gee-auth-token")?.value
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     const payload = await verifyToken(token)
     if (!payload) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     await connectDB()
@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error("Error fetching attempts:", error)
     return NextResponse.json(
-      { error: "Failed to fetch attempts" },
+      { error: "Оролдлогуудыг татаж чадсангүй" },
       { status: 500 }
     )
   }

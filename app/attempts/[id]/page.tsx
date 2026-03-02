@@ -118,7 +118,7 @@ export default function AttemptDetailPage() {
       <div className="min-h-screen flex flex-col">
         <Navbar />
         <main className="flex-1 flex items-center justify-center">
-          <p className="text-muted-foreground">Attempt not found.</p>
+          <p className="text-muted-foreground">Оролдлого олдсонгүй.</p>
         </main>
       </div>
     )
@@ -144,7 +144,7 @@ export default function AttemptDetailPage() {
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to My Attempts
+          Миний оролдлогууд руу буцах
         </Link>
 
         {/* Score header */}
@@ -152,7 +152,7 @@ export default function AttemptDetailPage() {
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-2xl font-bold text-foreground">
-                Score Report
+                Онооны тайлан
               </h1>
               <p className="text-muted-foreground mt-1">
                 {attempt.testId.title} ({attempt.testId.tag})
@@ -162,7 +162,7 @@ export default function AttemptDetailPage() {
               <div className="text-3xl font-bold text-primary">
                 {totalPercentage}%
               </div>
-              <div className="text-sm text-muted-foreground">Total Score</div>
+              <div className="text-sm text-muted-foreground">Нийт оноо</div>
             </div>
           </div>
 
@@ -170,7 +170,7 @@ export default function AttemptDetailPage() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Award className="h-4 w-4" />
-                <span className="text-xs font-medium">MC Score</span>
+                <span className="text-xs font-medium">СД оноо</span>
               </div>
               <span className="text-lg font-bold text-foreground">
                 {attempt.mcScore} / {attempt.totalMCPoints}
@@ -179,7 +179,7 @@ export default function AttemptDetailPage() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <FileText className="h-4 w-4" />
-                <span className="text-xs font-medium">FR Points</span>
+                <span className="text-xs font-medium">ЧБ оноо</span>
               </div>
               <span className="text-lg font-bold text-foreground">
                 {frScore} / {attempt.totalFRPoints}
@@ -188,7 +188,7 @@ export default function AttemptDetailPage() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Award className="h-4 w-4" />
-                <span className="text-xs font-medium">Total Points</span>
+                <span className="text-xs font-medium">Нийт оноо</span>
               </div>
               <span className="text-lg font-bold text-foreground">
                 {attempt.totalScore} / {attempt.totalPossible}
@@ -197,7 +197,7 @@ export default function AttemptDetailPage() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <CheckCircle className="h-4 w-4" />
-                <span className="text-xs font-medium">MC Correct</span>
+                <span className="text-xs font-medium">СД зөв</span>
               </div>
               <span className="text-lg font-bold text-foreground">
                 {attempt.mcAnswers.filter((a) => a.isCorrect).length} /{" "}
@@ -207,10 +207,10 @@ export default function AttemptDetailPage() {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1.5 text-muted-foreground">
                 <Clock className="h-4 w-4" />
-                <span className="text-xs font-medium">Time Used</span>
+                <span className="text-xs font-medium">Зарцуулсан хугацаа</span>
               </div>
               <span className="text-lg font-bold text-foreground">
-                {duration} min
+                {duration} мин
               </span>
             </div>
           </div>
@@ -220,7 +220,7 @@ export default function AttemptDetailPage() {
         {attempt.mcAnswers.length > 0 && (
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">
-              Multiple Choice Results
+              Сонгох даалгаврын дүн
             </h2>
             <div className="flex flex-col gap-3">
               {attempt.mcAnswers.map((mc, i) => (
@@ -238,7 +238,7 @@ export default function AttemptDetailPage() {
                       <XCircle className="h-5 w-5 text-destructive shrink-0" />
                     )}
                     <span className="flex-1 font-medium text-sm text-foreground">
-                      Question {i + 1}
+                      Даалгавар {i + 1}
                     </span>
                     <span
                       className={`text-sm font-bold ${mc.isCorrect ? "text-green-600" : "text-destructive"}`}
@@ -293,12 +293,12 @@ export default function AttemptDetailPage() {
                               />
                               {isCorrectAnswer && (
                                 <span className="text-xs text-green-700 font-medium">
-                                  Correct
+                                  Зөв
                                 </span>
                               )}
                               {isUserAnswer && !isCorrectAnswer && (
                                 <span className="text-xs text-destructive font-medium">
-                                  Your answer
+                                  Таны хариу
                                 </span>
                               )}
                             </div>
@@ -308,7 +308,7 @@ export default function AttemptDetailPage() {
                       {mc.solution && (
                         <div className="bg-primary/5 border border-primary/20 rounded-lg p-3 mt-1">
                           <div className="text-xs font-medium text-primary mb-1.5">
-                            Solution
+                            Бодолт
                           </div>
                           <MarkdownRenderer
                             content={mc.solution}
@@ -328,7 +328,7 @@ export default function AttemptDetailPage() {
         {attempt.frAnswers.length > 0 && (
           <section className="mb-8">
             <h2 className="text-xl font-semibold text-foreground mb-4">
-              Free Response Results
+              Чөлөөт бодлогын дүн
             </h2>
             <div className="flex flex-col gap-3">
               {attempt.frAnswers.map((fr, i) => (
@@ -346,7 +346,7 @@ export default function AttemptDetailPage() {
                       <XCircle className="h-5 w-5 text-destructive shrink-0" />
                     )}
                     <span className="flex-1 font-medium text-sm text-foreground">
-                      Question {i + 1}
+                      Даалгавар {i + 1}
                     </span>
                     <span
                       className={`text-sm font-bold ${fr.isCorrect ? "text-green-600" : "text-destructive"}`}
@@ -372,7 +372,7 @@ export default function AttemptDetailPage() {
                       {fr.userAnswer && (
                         <div className="bg-muted/30 rounded-lg p-3">
                           <div className="text-xs font-medium text-muted-foreground mb-1.5">
-                            Your Method / Answer
+                            Таны бодолт / хариу
                           </div>
                           <p className="text-sm text-foreground whitespace-pre-wrap">
                             {fr.userAnswer}
@@ -382,7 +382,7 @@ export default function AttemptDetailPage() {
                       {fr.correctAnswer && (
                         <div className="bg-muted/30 rounded-lg p-3">
                           <div className="text-xs font-medium text-muted-foreground mb-1.5">
-                            Correct Answer
+                            Зөв хариу
                           </div>
                           <p className="text-sm text-foreground whitespace-pre-wrap">
                             {fr.correctAnswer}
@@ -392,7 +392,7 @@ export default function AttemptDetailPage() {
                       {fr.solution && (
                         <div className="bg-primary/5 border border-primary/20 rounded-lg p-3">
                           <div className="text-xs font-medium text-primary mb-1.5">
-                            Solution
+                            Бодолт
                           </div>
                           <MarkdownRenderer
                             content={fr.solution}

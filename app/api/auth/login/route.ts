@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const user = await User.findOne({ email: email.toLowerCase() })
     if (!user) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
+        { error: "Имэйл эсвэл нууц үг буруу байна" },
         { status: 401 }
       )
     }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     const isValid = await verifyPassword(password, user.passwordHash)
     if (!isValid) {
       return NextResponse.json(
-        { error: "Invalid email or password" },
+        { error: "Имэйл эсвэл нууц үг буруу байна" },
         { status: 401 }
       )
     }
@@ -49,6 +49,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error("Login error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json({ error: "Серверийн дотоод алдаа" }, { status: 500 })
   }
 }

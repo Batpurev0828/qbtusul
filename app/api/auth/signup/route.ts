@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     const existingUser = await User.findOne({ email: email.toLowerCase() })
     if (existingUser) {
       return NextResponse.json(
-        { error: "An account with this email already exists" },
+        { error: "Энэ имэйлтэй бүртгэл аль хэдийн байна" },
         { status: 409 }
       )
     }
@@ -49,6 +49,6 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error("Signup error:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    return NextResponse.json({ error: "Серверийн дотоод алдаа" }, { status: 500 })
   }
 }

@@ -8,27 +8,27 @@ import { BookOpen, Clock, CheckCircle, BarChart3 } from "lucide-react"
 const features = [
   {
     icon: BookOpen,
-    title: "Past Year Tests",
+    title: "Өмнөх оны тестүүд",
     description:
-      "Access a comprehensive collection of previous GEE exams organized by year.",
+      "Өмнөх оны ЭЕШ-ийн даалгавруудыг оноор нь ангилж харж болно.",
   },
   {
     icon: Clock,
-    title: "Timed Practice",
+    title: "Хугацаатай дасгал",
     description:
-      "Simulate real exam conditions with custom time limits on every test.",
+      "Тест бүрт хугацаа тохируулж, жинхэнэ шалгалтын нөхцөлд ажиллана.",
   },
   {
     icon: CheckCircle,
-    title: "Auto-graded MCQs",
+    title: "Сонгох даалгаврын автомат шалгалт",
     description:
-      "Multiple choice questions are graded instantly so you know where you stand.",
+      "Сонгох даалгавар шууд дүнлэгдэж, түвшнээ дор нь мэднэ.",
   },
   {
     icon: BarChart3,
-    title: "Detailed Reports",
+    title: "Онооны задаргаа",
     description:
-      "See your score breakdown per question with solutions and explanations.",
+      "Даалгавар тус бүрийн оноо, бодолт, тайлбарыг нэг дороос үзнэ.",
   },
 ]
 
@@ -44,17 +44,16 @@ export default function HomePage() {
         <div className="max-w-3xl mx-auto text-center flex flex-col items-center gap-6">
           <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-1.5 rounded-full text-sm font-medium">
             <BookOpen className="h-4 w-4" />
-            Mongolian GEE Practice Platform
+            Монгол ЭЕШ Бэлтгэлийн Платформ
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground tracking-tight text-balance leading-tight">
-            Master your GEE exam with past year practice
+            Өмнөх оны шалгалтуудаар ЭЕШ-дээ амжилттай бэлд
           </h1>
 
           <p className="text-lg text-muted-foreground max-w-2xl text-pretty leading-relaxed">
-            Prepare for the Mongolian General Entrance Examination with our
-            extensive question bank. Practice with real past year questions, get
-            instant feedback on multiple choice, and review detailed solutions.
+            ЭЕШ-д бэлтгэх өргөн асуултын санг ашиглаж, өмнөх оны шалгалтуудаар
+            бэлдэн чадвараа үнэлээрэй.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3 mt-2">
@@ -64,13 +63,13 @@ export default function HomePage() {
                   href="/signup"
                   className="inline-flex items-center justify-center h-11 px-6 bg-primary text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity"
                 >
-                  Get started free
+                  Бүртгүүлэх
                 </Link>
                 <Link
                   href="/login"
                   className="inline-flex items-center justify-center h-11 px-6 border border-border bg-card text-foreground font-medium rounded-lg text-sm hover:bg-muted transition-colors"
                 >
-                  Sign in
+                  Нэвтрэх
                 </Link>
               </>
             ) : !loading ? (
@@ -78,7 +77,7 @@ export default function HomePage() {
                 href="/tests"
                 className="inline-flex items-center justify-center h-11 px-6 bg-primary text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity"
               >
-                Browse tests
+                Тестүүд үзэх
               </Link>
             ) : null}
           </div>
@@ -89,7 +88,7 @@ export default function HomePage() {
       <section className="border-t border-border bg-card px-4 py-16">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-2xl font-bold text-center text-foreground mb-10 text-balance">
-            Everything you need to prepare
+            Бэлтгэлд хэрэгтэй бүх зүйл
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature) => (
@@ -115,8 +114,8 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-border px-4 py-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between text-sm text-muted-foreground">
-          <span>GEE Question Bank</span>
-          <span>Practice makes perfect</span>
+          <span>ЭЕШ Асуултын Сан</span>
+          <span>Дасгал төгс төгөлдөр болгоно</span>
         </div>
       </footer>
     </div>

@@ -23,11 +23,11 @@ export default function SignupPage() {
     setError("")
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match")
+      setError("Нууц үг таарахгүй байна")
       return
     }
     if (password.length < 6) {
-      setError("Password must be at least 6 characters")
+      setError("Нууц үг хамгийн багадаа 6 тэмдэгттэй байна")
       return
     }
 
@@ -36,7 +36,7 @@ export default function SignupPage() {
       await signup(name, email, password)
       router.push("/tests")
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Signup failed")
+      setError(err instanceof Error ? err.message : "Бүртгүүлэхэд алдаа гарлаа")
     } finally {
       setLoading(false)
     }
@@ -52,10 +52,10 @@ export default function SignupPage() {
               <BookOpen className="h-6 w-6 text-primary-foreground" />
             </div>
             <h1 className="text-2xl font-bold text-foreground text-balance text-center">
-              Create your account
+              Бүртгэл үүсгэх
             </h1>
             <p className="text-sm text-muted-foreground">
-              Start practicing GEE exams today
+              ЭЕШ-ийн бэлтгэлээ өнөөдрөөс эхлүүлээрэй
             </p>
           </div>
 
@@ -71,7 +71,7 @@ export default function SignupPage() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="name" className="text-sm font-medium text-foreground">
-                Full name
+                Username
               </label>
               <input
                 id="name"
@@ -80,13 +80,13 @@ export default function SignupPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="John Doe"
+                placeholder="Enter username here..."
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-sm font-medium text-foreground">
-                Email
+                email
               </label>
               <input
                 id="email"
@@ -95,13 +95,13 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="you@example.com"
+                placeholder="Enter your email here..."
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="password" className="text-sm font-medium text-foreground">
-                Password
+                Нууц үг
               </label>
               <div className="relative">
                 <input
@@ -112,13 +112,13 @@ export default function SignupPage() {
                   required
                   minLength={6}
                   className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="At least 6 characters"
+                  placeholder="Хамгийн багадаа 6 тэмдэгт"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? "Нууц үг нуух" : "Нууц үг харуулах"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -134,7 +134,7 @@ export default function SignupPage() {
                 htmlFor="confirmPassword"
                 className="text-sm font-medium text-foreground"
               >
-                Confirm password
+                Нууц үг давтах
               </label>
               <input
                 id="confirmPassword"
@@ -143,7 +143,7 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="Confirm your password"
+                placeholder="Нууц үгээ дахин оруулна уу"
               />
             </div>
 
@@ -152,16 +152,16 @@ export default function SignupPage() {
               disabled={loading}
               className="h-10 bg-primary text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity disabled:opacity-50 mt-2"
             >
-              {loading ? "Creating account..." : "Create account"}
+              {loading ? "Бүртгэл үүсгэж байна..." : "Бүртгэл үүсгэх"}
             </button>
 
             <p className="text-sm text-center text-muted-foreground mt-2">
-              Already have an account?{" "}
+              Бүртгэлтэй юу?{" "}
               <Link
                 href="/login"
                 className="text-primary font-medium hover:underline"
               >
-                Sign in
+                Нэвтрэх
               </Link>
             </p>
           </form>

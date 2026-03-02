@@ -60,9 +60,9 @@ export default function MyAttemptsPage() {
       <Navbar />
       <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8">
         <div className="flex flex-col gap-2 mb-8">
-          <h1 className="text-3xl font-bold text-foreground">My Attempts</h1>
+          <h1 className="text-3xl font-bold text-foreground">Миний оролдлогууд</h1>
           <p className="text-muted-foreground">
-            Review your past test attempts and scores.
+            Өмнөх тестийн оролдлого болон оноогоо нягтална уу.
           </p>
         </div>
 
@@ -74,7 +74,7 @@ export default function MyAttemptsPage() {
 
         {error && (
           <div className="bg-destructive/10 text-destructive text-sm px-4 py-3 rounded-lg">
-            Failed to load attempts.
+            Оролдлогуудыг ачаалж чадсангүй.
           </div>
         )}
 
@@ -82,13 +82,13 @@ export default function MyAttemptsPage() {
           <div className="text-center py-20 flex flex-col items-center gap-3">
             <FileText className="h-12 w-12 text-muted-foreground/50" />
             <p className="text-muted-foreground">
-              {"You haven't taken any tests yet."}
+              {"Та одоогоор тест ажиллаагүй байна."}
             </p>
             <Link
               href="/tests"
               className="text-primary text-sm font-medium hover:underline"
             >
-              Browse tests
+              Тестүүд үзэх
             </Link>
           </div>
         )}
@@ -130,20 +130,20 @@ export default function MyAttemptsPage() {
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-foreground text-sm group-hover:text-primary transition-colors truncate">
-                      {attempt.testId?.title || "Unknown Test"}
+                      {attempt.testId?.title || "Тодорхойгүй тест"}
                     </h3>
                     <div className="flex flex-wrap gap-3 mt-1 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Award className="h-3 w-3" />
-                        {attempt.totalScore}/{attempt.totalPossible} total pts
+                        {attempt.totalScore}/{attempt.totalPossible} нийт оноо
                       </span>
                       <span className="flex items-center gap-1">
                         <FileText className="h-3 w-3" />
-                        {correctCount}/{attempt.mcAnswers?.length || 0} correct
+                        {correctCount}/{attempt.mcAnswers?.length || 0} зөв
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="h-3 w-3" />
-                        {duration} min
+                        {duration} мин
                       </span>
                       <span>
                         {new Date(attempt.submittedAt).toLocaleDateString()}

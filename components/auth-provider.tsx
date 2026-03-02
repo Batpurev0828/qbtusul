@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       })
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error || "Login failed")
+      if (!res.ok) throw new Error(json.error || "Нэвтрэхэд алдаа гарлаа")
       await mutate({ user: json.user }, false)
       router.push("/")
       router.refresh()
@@ -62,7 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ name, email, password }),
       })
       const json = await res.json()
-      if (!res.ok) throw new Error(json.error || "Signup failed")
+      if (!res.ok) throw new Error(json.error || "Бүртгүүлэхэд алдаа гарлаа")
       await mutate({ user: json.user }, false)
       router.push("/")
       router.refresh()

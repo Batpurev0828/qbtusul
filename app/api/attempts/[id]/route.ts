@@ -11,12 +11,12 @@ export async function GET(
     const { id } = await params
     const token = request.cookies.get("gee-auth-token")?.value
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     const payload = await verifyToken(token)
     if (!payload) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     await connectDB()
@@ -26,7 +26,7 @@ export async function GET(
 
     if (!attempt) {
       return NextResponse.json(
-        { error: "Attempt not found" },
+        { error: "Оролдлого олдсонгүй" },
         { status: 404 }
       )
     }
@@ -36,14 +36,14 @@ export async function GET(
       String(attempt.userId) !== payload.userId &&
       payload.role !== "admin"
     ) {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+      return NextResponse.json({ error: "Хандах эрхгүй" }, { status: 403 })
     }
 
     return NextResponse.json(attempt)
   } catch (error) {
     console.error("Error fetching attempt:", error)
     return NextResponse.json(
-      { error: "Failed to fetch attempt" },
+      { error: "Оролдлогыг татаж чадсангүй" },
       { status: 500 }
     )
   }

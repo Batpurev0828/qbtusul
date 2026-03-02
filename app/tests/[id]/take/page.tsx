@@ -159,7 +159,7 @@ export default function TakeTestPage() {
               ) : (
                 <Send className="h-4 w-4" />
               )}
-              Submit
+              Илгээх
             </button>
           </div>
         </div>
@@ -183,7 +183,7 @@ export default function TakeTestPage() {
                       : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  MC ({mcQuestions.length})
+                  СД ({mcQuestions.length})
                 </button>
               )}
               {frQuestions.length > 0 && (
@@ -198,7 +198,7 @@ export default function TakeTestPage() {
                       : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  FR ({frQuestions.length})
+                  ЧБ ({frQuestions.length})
                 </button>
               )}
             </div>
@@ -230,7 +230,7 @@ export default function TakeTestPage() {
             </div>
 
             <div className="text-xs text-muted-foreground">
-              Answered: {answeredMC + answeredFR} / {totalQuestions}
+              Хариулсан: {answeredMC + answeredFR} / {totalQuestions}
             </div>
           </div>
         </aside>
@@ -241,11 +241,11 @@ export default function TakeTestPage() {
             <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-5">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-foreground">
-                  {currentSection === "mc" ? "Multiple Choice" : "Free Response"}{" "}
+                  {currentSection === "mc" ? "Сонгох даалгавар" : "Чөлөөт бодлого"}{" "}
                   #{currentIndex + 1}
                 </h2>
                 <span className="text-sm text-muted-foreground">
-                  {currentQ.points} {currentQ.points === 1 ? "point" : "points"}
+                  {currentQ.points} оноо
                 </span>
               </div>
 
@@ -306,7 +306,7 @@ export default function TakeTestPage() {
                   }
                   rows={8}
                   className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y"
-                  placeholder="Write your answer here..."
+                  placeholder="Хариугаа энд бичнэ үү..."
                 />
               )}
 
@@ -328,7 +328,7 @@ export default function TakeTestPage() {
                   className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground disabled:opacity-30"
                 >
                   <ChevronLeft className="h-4 w-4" />
-                  Previous
+                  Өмнөх
                 </button>
                 <button
                   onClick={() => {
@@ -348,7 +348,7 @@ export default function TakeTestPage() {
                   }
                   className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground disabled:opacity-30"
                 >
-                  Next
+                  Дараах
                   <ChevronRight className="h-4 w-4" />
                 </button>
               </div>
@@ -362,19 +362,19 @@ export default function TakeTestPage() {
         <div className="fixed inset-0 z-50 bg-foreground/50 flex items-center justify-center px-4">
           <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full flex flex-col gap-4">
             <h3 className="text-lg font-semibold text-foreground">
-              Submit test?
+              Тест илгээх үү?
             </h3>
             <p className="text-sm text-muted-foreground">
-              You have answered {answeredMC} of {mcQuestions.length} MC questions
-              and {answeredFR} of {frQuestions.length} FR questions. This action
-              cannot be undone.
+              Та {mcQuestions.length} СД-аас {answeredMC}, {frQuestions.length}
+              ЧБ-аас {answeredFR}-д хариулсан байна. Энэ үйлдлийг буцаах
+              боломжгүй.
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
                 onClick={() => setShowConfirm(false)}
                 className="h-9 px-4 text-sm font-medium text-muted-foreground hover:text-foreground"
               >
-                Cancel
+                Цуцлах
               </button>
               <button
                 onClick={() => {
@@ -384,7 +384,7 @@ export default function TakeTestPage() {
                 disabled={submitting}
                 className="h-9 px-4 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 disabled:opacity-50"
               >
-                {submitting ? "Submitting..." : "Confirm Submit"}
+                {submitting ? "Илгээж байна..." : "Илгээхийг батлах"}
               </button>
             </div>
           </div>

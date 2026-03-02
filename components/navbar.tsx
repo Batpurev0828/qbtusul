@@ -25,7 +25,7 @@ export function Navbar() {
             className="flex items-center gap-2 text-primary font-bold text-lg"
           >
             <BookOpen className="h-6 w-6" />
-            <span>GEE Bank</span>
+            <span>ЭЕШ Сан</span>
           </Link>
 
           {/* Desktop nav */}
@@ -34,7 +34,7 @@ export function Navbar() {
               href="/tests"
               className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
             >
-              Tests
+              Тестүүд
             </Link>
             {!loading && user ? (
               <>
@@ -44,14 +44,14 @@ export function Navbar() {
                     className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
                   >
                     <Shield className="h-4 w-4" />
-                    Admin
+                    Админ
                   </Link>
                 )}
                 <Link
                   href="/my-attempts"
                   className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
                 >
-                  My Attempts
+                  Миний оролдлогууд
                 </Link>
                 <div className="flex items-center gap-3 pl-3 border-l border-border">
                   <span className="text-sm text-muted-foreground flex items-center gap-1">
@@ -63,7 +63,7 @@ export function Navbar() {
                     className="flex items-center gap-1 text-sm text-muted-foreground hover:text-destructive transition-colors"
                   >
                     <LogOut className="h-4 w-4" />
-                    Logout
+                    Гарах
                   </button>
                 </div>
               </>
@@ -73,13 +73,13 @@ export function Navbar() {
                   href="/login"
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  Log in
+                  Нэвтрэх
                 </Link>
                 <Link
                   href="/signup"
                   className="text-sm font-medium bg-primary text-primary-foreground px-4 py-2 rounded-md hover:opacity-90 transition-opacity"
                 >
-                  Sign up
+                  Бүртгүүлэх
                 </Link>
               </div>
             ) : null}
@@ -89,7 +89,7 @@ export function Navbar() {
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 text-muted-foreground"
-            aria-label="Toggle menu"
+            aria-label="Цэс нээх/хаах"
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -103,7 +103,7 @@ export function Navbar() {
               onClick={() => setMobileOpen(false)}
               className="py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
             >
-              Tests
+              Тестүүд
             </Link>
             {!loading && user ? (
               <>
@@ -113,7 +113,7 @@ export function Navbar() {
                     onClick={() => setMobileOpen(false)}
                     className="py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
                   >
-                    Admin Panel
+                    Админ самбар
                   </Link>
                 )}
                 <Link
@@ -121,7 +121,7 @@ export function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
                 >
-                  My Attempts
+                  Миний оролдлогууд
                 </Link>
                 <button
                   onClick={() => {
@@ -130,7 +130,7 @@ export function Navbar() {
                   }}
                   className="py-2 text-left text-sm font-medium text-destructive"
                 >
-                  Logout
+                  Гарах
                 </button>
               </>
             ) : !loading ? (
@@ -140,14 +140,14 @@ export function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
                 >
-                  Log in
+                  Нэвтрэх
                 </Link>
                 <Link
                   href="/signup"
                   onClick={() => setMobileOpen(false)}
                   className="py-2 text-sm font-medium text-primary"
                 >
-                  Sign up
+                  Бүртгүүлэх
                 </Link>
               </>
             ) : null}

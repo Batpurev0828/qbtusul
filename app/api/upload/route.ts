@@ -17,19 +17,19 @@ export async function POST(request: NextRequest) {
     // Only admins can upload
     const token = request.cookies.get("gee-auth-token")?.value
     if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      return NextResponse.json({ error: "Нэвтрэх эрхгүй" }, { status: 401 })
     }
 
     const payload = await verifyToken(token)
     if (!payload || payload.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+      return NextResponse.json({ error: "Хандах эрхгүй" }, { status: 403 })
     }
 
     const formData = await request.formData()
     const file = formData.get("file") as File
 
     if (!file) {
-      return NextResponse.json({ error: "No file provided" }, { status: 400 })
+      return NextResponse.json({ error: "Файл оруулаагүй байна" }, { status: 400 })
     }
 
     // Validate file type
@@ -41,13 +41,13 @@ export async function POST(request: NextRequest) {
       "image/svg+xml",
     ]
     if (!allowedTypes.includes(file.type)) {
-      return NextResponse.json({ error: "Invalid file type" }, { status: 400 })
+      return NextResponse.json({ error: "Файлын төрөл буруу байна" }, { status: 400 })
     }
 
     // Max 5MB
     if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "File too large (max 5MB)" },
+        { error: "Файл хэт том байна (дээд хэмжээ 5MB)" },
         { status: 400 }
       )
     }
@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "Blob storage is not configured. Add BLOB_READ_WRITE_TOKEN (or VERCEL_BLOB_READ_WRITE_TOKEN) to environment variables.",
+            "Blob storage тохируулаагүй байна. Орчны хувьсагчдаа BLOB_READ_WRITE_TOKEN (эсвэл VERCEL_BLOB_READ_WRITE_TOKEN) нэмнэ үү.",
         },
         { status: 500 }
       )
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
     console.error("Upload error:", error)
     return NextResponse.json(
       {
-        error: "Upload failed",
+        error: "Байршуулалт амжилтгүй боллоо",
         details: message,
       },
       { status: 500 }

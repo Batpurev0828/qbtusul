@@ -60,7 +60,7 @@ export default function TestDetailPage() {
           className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
-          Back to Tests
+          Буцах
         </Link>
 
         {isLoading && (
@@ -91,26 +91,26 @@ export default function TestDetailPage() {
             </div>
 
             <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-4">
-              <h2 className="font-semibold text-foreground">Test Overview</h2>
+              <h2 className="font-semibold text-foreground">Тестийн мэдээлэл</h2>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-1.5 text-muted-foreground">
                     <Clock className="h-4 w-4" />
                     <span className="text-xs font-medium uppercase tracking-wide">
-                      Time Limit
+                      Хугацаа
                     </span>
                   </div>
                   <span className="text-lg font-bold text-foreground">
                     {test.timeLimitMinutes > 0
-                      ? `${test.timeLimitMinutes} min`
-                      : "Unlimited"}
+                      ? `${test.timeLimitMinutes} мин`
+                      : "Хязгааргүй"}
                   </span>
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-1.5 text-muted-foreground">
                     <FileText className="h-4 w-4" />
                     <span className="text-xs font-medium uppercase tracking-wide">
-                      MC Questions
+                      Тестын тоо
                     </span>
                   </div>
                   <span className="text-lg font-bold text-foreground">
@@ -121,7 +121,7 @@ export default function TestDetailPage() {
                   <div className="flex items-center gap-1.5 text-muted-foreground">
                     <FileText className="h-4 w-4" />
                     <span className="text-xs font-medium uppercase tracking-wide">
-                      FR Questions
+                      Задгай бодлого
                     </span>
                   </div>
                   <span className="text-lg font-bold text-foreground">
@@ -132,7 +132,7 @@ export default function TestDetailPage() {
                   <div className="flex items-center gap-1.5 text-muted-foreground">
                     <Award className="h-4 w-4" />
                     <span className="text-xs font-medium uppercase tracking-wide">
-                      Total Points
+                      Нийт оноо
                     </span>
                   </div>
                   <span className="text-lg font-bold text-foreground">
@@ -143,23 +143,22 @@ export default function TestDetailPage() {
             </div>
 
             <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-3">
-              <h2 className="font-semibold text-foreground">Before you start</h2>
+              <h2 className="font-semibold text-foreground">Эхлэхээс өмнө</h2>
               <ul className="text-sm text-muted-foreground flex flex-col gap-2 leading-relaxed">
                 <li>
                   - {test.timeLimitMinutes > 0
-                    ? 'The timer will start as soon as you click "Start Test" and the test will auto-submit when time runs out.'
-                    : "This test has unlimited time and will not auto-submit."}
+                    ? '"Тест эхлэх" товч дарахад эхэлж, хугацаа дуусмагц автоматаар илгээгдэнэ.'
+                    : "Энэ тест хугацааны хязгааргүй тул автоматаар илгээгдэхгүй."}
                 </li>
                 <li>
-                  - Multiple choice questions will be auto-graded immediately.
+                  - Сонгох даалгаврууд шууд автоматаар шалгагдана.
                 </li>
                 <li>
-                  - Free response answers are auto-graded by exact match with
-                  the expected answer, and solutions are shown after submission.
+                  - Чөлөөт бодлогын хариуг зөв хариутай яг тааруулж автоматаар
+                  шалгана. Илгээсний дараа бодолт харагдана.
                 </li>
                 <li>
-                  - You can review your answers and see solutions after
-                  submitting.
+                  - Илгээсний дараа өөрийн хариу болон бодолтыг нягталж болно.
                 </li>
               </ul>
             </div>
@@ -170,7 +169,7 @@ export default function TestDetailPage() {
               className="inline-flex items-center justify-center gap-2 h-12 px-6 bg-primary text-primary-foreground font-medium rounded-xl text-base hover:opacity-90 transition-opacity self-start"
             >
               <Play className="h-5 w-5" />
-              {user ? "Start Test" : "Sign in to Start"}
+              {user ? "Тест эхлэх" : "Эхлэхийн тулд нэвтэрнэ үү"}
             </button>
           </div>
         )}

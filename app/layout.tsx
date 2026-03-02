@@ -11,9 +11,9 @@ const _inter = Inter({ subsets: ["latin", "cyrillic"] })
 const _jetbrainsMono = JetBrains_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GEE Question Bank - Mongolian Entrance Exam Practice",
+  title: "ЭЕШ Асуултын Сан",
   description:
-    "Practice past year Mongolian General Entrance Exam (GEE) questions with timed tests, detailed solutions, and score reports.",
+    "ЭЕШ-ийн өмнөх оны даалгавруудаар хугацаатай тест ажиллаж, бодолт болон онооны тайлангаа үзээрэй.",
 }
 
 export const viewport: Viewport = {
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="mn">
       <body className="font-sans antialiased min-h-screen">
         <AuthProvider>{children}</AuthProvider>
       </body>

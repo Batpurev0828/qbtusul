@@ -24,7 +24,7 @@ export default function LoginPage() {
       await login(email, password)
       router.push("/tests")
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Login failed")
+      setError(err instanceof Error ? err.message : "Нэвтрэхэд алдаа гарлаа")
     } finally {
       setLoading(false)
     }
@@ -40,10 +40,10 @@ export default function LoginPage() {
               <BookOpen className="h-6 w-6 text-primary-foreground" />
             </div>
             <h1 className="text-2xl font-bold text-foreground text-balance text-center">
-              Welcome back
+              Тавтай морил
             </h1>
             <p className="text-sm text-muted-foreground">
-              Sign in to continue practicing
+              Үргэлжлүүлэхийн тулд нэвтэрнэ үү
             </p>
           </div>
 
@@ -62,7 +62,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="text-sm font-medium text-foreground"
               >
-                Email
+                email
               </label>
               <input
                 id="email"
@@ -71,7 +71,7 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="h-10 px-3 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                placeholder="you@example.com"
+                placeholder="Enter your email here..."
               />
             </div>
 
@@ -80,7 +80,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="text-sm font-medium text-foreground"
               >
-                Password
+                Нууц үг
               </label>
               <div className="relative">
                 <input
@@ -90,13 +90,13 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full h-10 px-3 pr-10 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Enter your password"
+                  placeholder="Нууц үгээ оруулна уу"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? "Нууц үг нуух" : "Нууц үг харуулах"}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -112,16 +112,16 @@ export default function LoginPage() {
               disabled={loading}
               className="h-10 bg-primary text-primary-foreground font-medium rounded-lg text-sm hover:opacity-90 transition-opacity disabled:opacity-50 mt-2"
             >
-              {loading ? "Signing in..." : "Sign in"}
+              {loading ? "Нэвтэрч байна..." : "Нэвтрэх"}
             </button>
 
             <p className="text-sm text-center text-muted-foreground mt-2">
-              {"Don't have an account? "}
+              {"Бүртгэлгүй юу? "}
               <Link
                 href="/signup"
                 className="text-primary font-medium hover:underline"
               >
-                Sign up
+                Бүртгүүлэх
               </Link>
             </p>
           </form>
