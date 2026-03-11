@@ -13,6 +13,9 @@ export interface IMCQuestion {
 export interface IFRQuestion {
   questionText: string
   description: string
+  answerMode?: "text" | "slot"
+  slotLetters?: string[]
+  slotCorrectChoices?: string[]
   correctAnswer: string
   points: number
   solution: string
@@ -47,6 +50,9 @@ const MCQuestionSchema = new Schema<IMCQuestion>({
 const FRQuestionSchema = new Schema<IFRQuestion>({
   questionText: { type: String, default: "" },
   description: { type: String, default: "" },
+  answerMode: { type: String, enum: ["text", "slot"], default: "text" },
+  slotLetters: [{ type: String }],
+  slotCorrectChoices: [{ type: String }],
   correctAnswer: { type: String, default: "" },
   points: { type: Number, default: 5 },
   solution: { type: String, default: "" },

@@ -4,6 +4,10 @@ import Test from "@/lib/models/test"
 import TestAttempt from "@/lib/models/test-attempt"
 import { verifyToken } from "@/lib/auth"
 
+function normalizeFRAnswer(value: string): string {
+  return value.trim()
+}
+
 // POST submit a test attempt
 export async function POST(request: NextRequest) {
   try {
@@ -67,6 +71,9 @@ export async function POST(request: NextRequest) {
         q: {
           questionText: string
           description: string
+          answerMode?: "text" | "slot"
+          slotLetters?: string[]
+          slotCorrectChoices?: string[]
           correctAnswer: string
           points: number
           solution: string
@@ -74,8 +81,13 @@ export async function POST(request: NextRequest) {
         },
         i: number
       ) => {
-        const userAnswer = frAnswers?.[i] || ""
-        const correctAnswer = q.correctAnswer || ""
+        const userAnswer = normalizeFRAnswer(frAnswers?.[i] || "")
+        const correctAnswer = normalizeFRAnswer(
+          q.correctAnswer ||
+            ((q.slotLetters || []).map((_, idx) => q.slotCorrectChoices?.[idx] || "").join(
+              ""
+            ) || "")
+        )
         const isCorrect =
           correctAnswer.length > 0 && userAnswer === correctAnswer
         const earnedPoints = isCorrect ? q.points || 1 : 0

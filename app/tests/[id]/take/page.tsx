@@ -14,6 +14,22 @@ import {
 } from "lucide-react"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
 
+const SLOT_SYMBOL_OPTIONS = [
+  "-",
+  "+",
+  ".",
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+] as const
+
 interface MCQ {
   questionText: string
   description: string
@@ -25,6 +41,8 @@ interface MCQ {
 interface FRQ {
   questionText: string
   description: string
+  answerMode?: "text" | "slot"
+  slotLetters?: string[]
   points: number
   order: number
 }
@@ -58,6 +76,7 @@ export default function TakeTestPage() {
   const [startedAt] = useState(() => new Date())
   const [mcAnswers, setMcAnswers] = useState<Record<number, number>>({})
   const [frAnswers, setFrAnswers] = useState<Record<number, string>>({})
+  const [frSlotAnswers, setFrSlotAnswers] = useState<Record<number, string[]>>({})
   const [currentSection, setCurrentSection] = useState<"mc" | "fr">("mc")
   const [currentIndex, setCurrentIndex] = useState(0)
   const [submitting, setSubmitting] = useState(false)
@@ -85,7 +104,14 @@ export default function TakeTestPage() {
       const frAnswerArray: string[] = []
       const frLen = test?.frQuestions?.length || 0
       for (let i = 0; i < frLen; i++) {
-        frAnswerArray.push(frAnswers[i] || "")
+        const q = test?.frQuestions?.[i]
+        if ((q?.answerMode || "text") === "slot") {
+          const slotLetters = q?.slotLetters || []
+          const slotChoices = frSlotAnswers[i] || []
+          frAnswerArray.push(slotLetters.map((_, idx) => slotChoices[idx] || "").join(""))
+        } else {
+          frAnswerArray.push(frAnswers[i] || "")
+        }
       }
 
       const res = await fetch("/api/attempts", {
@@ -109,7 +135,7 @@ export default function TakeTestPage() {
     } finally {
       setSubmitting(false)
     }
-  }, [test, mcAnswers, frAnswers, id, startedAt, router])
+  }, [test, mcAnswers, frAnswers, frSlotAnswers, id, startedAt, router])
 
   const handleTimeUp = useCallback(() => {
     handleSubmit()
@@ -125,11 +151,24 @@ export default function TakeTestPage() {
 
   const mcQuestions = test.mcQuestions || []
   const frQuestions = test.frQuestions || []
+  const isFRAnswered = (q: FRQ | undefined, index: number) => {
+    if (!q) return false
+    if ((q.answerMode || "text") === "slot") {
+      const slotLetters = q.slotLetters || []
+      if (slotLetters.length === 0) return false
+      const slotChoices = frSlotAnswers[index] || []
+      return slotLetters.every((_, i) => (slotChoices[i] || "").length > 0)
+    }
+    return (frAnswers[index] || "").trim().length > 0
+  }
   const currentQuestions = currentSection === "mc" ? mcQuestions : frQuestions
   const currentQ = currentQuestions[currentIndex]
   const totalQuestions = mcQuestions.length + frQuestions.length
   const answeredMC = Object.keys(mcAnswers).length
-  const answeredFR = Object.values(frAnswers).filter((a) => a.trim()).length
+  const answeredFR = frQuestions.reduce(
+    (count, q, index) => count + (isFRAnswered(q, index) ? 1 : 0),
+    0
+  )
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -198,7 +237,7 @@ export default function TakeTestPage() {
                       : "bg-muted text-muted-foreground hover:text-foreground"
                   }`}
                 >
-                  ЧБ ({frQuestions.length})
+                  Задгай ({frQuestions.length})
                 </button>
               )}
             </div>
@@ -209,7 +248,7 @@ export default function TakeTestPage() {
                 const isAnswered =
                   currentSection === "mc"
                     ? mcAnswers[i] !== undefined
-                    : (frAnswers[i] || "").trim().length > 0
+                    : isFRAnswered(frQuestions[i], i)
                 const isCurrent = i === currentIndex
                 return (
                   <button
@@ -235,13 +274,12 @@ export default function TakeTestPage() {
           </div>
         </aside>
 
-        {/* Current question */}
         <div className="flex-1 min-w-0">
           {currentQ && (
             <div className="bg-card border border-border rounded-xl p-6 flex flex-col gap-5">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold text-foreground">
-                  {currentSection === "mc" ? "Сонгох даалгавар" : "Чөлөөт бодлого"}{" "}
+                  {currentSection === "mc" ? "Сонгох даалгавар" : "Задгай бодлого"}{" "}
                   #{currentIndex + 1}
                 </h2>
                 <span className="text-sm text-muted-foreground">
@@ -260,8 +298,7 @@ export default function TakeTestPage() {
                   <MarkdownRenderer content={currentQ.description} />
                 </div>
               )}
-
-              {/* MC options */}
+              
               {currentSection === "mc" && "options" in currentQ && (
                 <div className="flex flex-col gap-2">
                   {(currentQ as MCQ).options.map((opt, oi) => (
@@ -295,20 +332,75 @@ export default function TakeTestPage() {
               )}
 
               {/* FR answer box */}
-              {currentSection === "fr" && (
-                <textarea
-                  value={frAnswers[currentIndex] || ""}
-                  onChange={(e) =>
-                    setFrAnswers((prev) => ({
-                      ...prev,
-                      [currentIndex]: e.target.value,
-                    }))
-                  }
-                  rows={8}
-                  className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y"
-                  placeholder="Хариугаа энд бичнэ үү..."
-                />
-              )}
+              {currentSection === "fr" &&
+                ((currentQ as FRQ).answerMode || "text") === "slot" &&
+                "slotLetters" in currentQ && (
+                  <div className="flex flex-col gap-3 rounded-lg border border-border p-4">
+                    <div className="text-sm text-muted-foreground">
+                      Үсэг бүрт тэмдэг сонгоно уу
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {(((currentQ as FRQ).slotLetters || []) as string[]).map(
+                        (letter, letterIndex) => (
+                          <label
+                            key={`${letter}-${letterIndex}`}
+                            className="flex items-center justify-between rounded-md border border-border px-3 py-2"
+                          >
+                            <span className="font-mono text-sm text-foreground">
+                              {letter}
+                            </span>
+                            <select
+                              value={frSlotAnswers[currentIndex]?.[letterIndex] || ""}
+                              onChange={(e) =>
+                                setFrSlotAnswers((prev) => {
+                                  const slotLetters =
+                                    ((currentQ as FRQ).slotLetters as string[]) || []
+                                  const existing = prev[currentIndex] || []
+                                  const next = slotLetters.map((_, idx) =>
+                                    idx === letterIndex ? e.target.value : existing[idx] || ""
+                                  )
+                                  return { ...prev, [currentIndex]: next }
+                                })
+                              }
+                              className="h-8 w-24 px-2 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring font-mono"
+                            >
+                              <option value="">-</option>
+                              {SLOT_SYMBOL_OPTIONS.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          </label>
+                        )
+                      )}
+                    </div>
+                    <div className="text-sm">
+                      <span className="text-muted-foreground">Таны хариу: </span>
+                      <span className="font-mono text-foreground">
+                        {(((currentQ as FRQ).slotLetters || []) as string[])
+                          .map((_, i) => frSlotAnswers[currentIndex]?.[i] || "")
+                          .join("") || "(empty)"}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+              {currentSection === "fr" &&
+                ((currentQ as FRQ).answerMode || "text") !== "slot" && (
+                  <textarea
+                    value={frAnswers[currentIndex] || ""}
+                    onChange={(e) =>
+                      setFrAnswers((prev) => ({
+                        ...prev,
+                        [currentIndex]: e.target.value,
+                      }))
+                    }
+                    rows={8}
+                    className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y"
+                    placeholder="Хариугаа энд бичнэ үү..."
+                  />
+                )}
 
               {/* Navigation buttons */}
               <div className="flex items-center justify-between pt-2 border-t border-border">
@@ -365,9 +457,7 @@ export default function TakeTestPage() {
               Тест илгээх үү?
             </h3>
             <p className="text-sm text-muted-foreground">
-              Та {mcQuestions.length} СД-аас {answeredMC}, {frQuestions.length}
-              ЧБ-аас {answeredFR}-д хариулсан байна. Энэ үйлдлийг буцаах
-              боломжгүй.
+              Та {mcQuestions.length} сонгох даалгавараас {answeredMC}, {frQuestions.length} задгайгаас {answeredFR}-д хариулсан байна. Энэ үйлдлийг буцаах боломжгүй.
             </p>
             <div className="flex items-center justify-end gap-3">
               <button

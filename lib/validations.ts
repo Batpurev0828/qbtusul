@@ -24,6 +24,9 @@ export const mcQuestionSchema = z.object({
 export const frQuestionSchema = z.object({
   questionText: z.string().default(""),
   description: z.string().default(""),
+  answerMode: z.enum(["text", "slot"]).default("text"),
+  slotLetters: z.array(z.string().regex(/^[a-h]$/)).max(8).default([]),
+  slotCorrectChoices: z.array(z.string()).max(8).default([]),
   correctAnswer: z.string().default(""),
   points: z.number().min(0).default(5),
   solution: z.string().default(""),

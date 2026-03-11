@@ -15,6 +15,38 @@ import {
   X,
 } from "lucide-react"
 
+const SLOT_SYMBOL_OPTIONS = [
+  "-",
+  "+",
+  ".",
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+] as const
+
+function normalizeSlotLetters(raw: string): string[] {
+  const seen = new Set<string>()
+  const letters: string[] = []
+  for (const ch of raw.toLowerCase()) {
+    if (ch < "a" || ch > "h" || seen.has(ch)) continue
+    seen.add(ch)
+    letters.push(ch)
+    if (letters.length >= 8) break
+  }
+  return letters
+}
+
+function buildSlotAnswer(letters: string[], choices: string[]): string {
+  return letters.map((_, i) => choices[i] || "").join("")
+}
+
 export interface MCQuestion {
   questionText: string
   description: string
@@ -28,6 +60,9 @@ export interface MCQuestion {
 export interface FRQuestion {
   questionText: string
   description: string
+  answerMode?: "text" | "slot"
+  slotLetters?: string[]
+  slotCorrectChoices?: string[]
   correctAnswer: string
   points: number
   solution: string
@@ -98,6 +133,7 @@ export function QuestionEditor({
   )
 
   const mcQ = type === "mc" ? (question as MCQuestion) : null
+  const frQ = type === "fr" ? (question as FRQuestion) : null
   const questionPreview = (question.questionText || "").trim()
 
   return (
@@ -367,23 +403,150 @@ export function QuestionEditor({
           )}
 
           {/* Solution */}
-          {type === "fr" && (
+          {type === "fr" && frQ && (
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-foreground">
-                Correct Answer
+                Answer Type
               </label>
-              <textarea
-                value={(question as FRQuestion).correctAnswer || ""}
-                onChange={(e) =>
+              <select
+                value={frQ.answerMode || "text"}
+                onChange={(e) => {
+                  const nextMode = e.target.value as "text" | "slot"
+                  if (nextMode === "slot") {
+                    const slotLetters = frQ.slotLetters?.length
+                      ? frQ.slotLetters
+                      : ["a", "b", "c", "d"]
+                    const slotCorrectChoices = slotLetters.map(
+                      (_, i) => frQ.slotCorrectChoices?.[i] || ""
+                    )
+                    onUpdate({
+                      ...frQ,
+                      answerMode: "slot",
+                      slotLetters,
+                      slotCorrectChoices,
+                      correctAnswer: buildSlotAnswer(slotLetters, slotCorrectChoices),
+                    })
+                    return
+                  }
                   onUpdate({
-                    ...question,
-                    correctAnswer: e.target.value,
-                  } as FRQuestion)
-                }
-                rows={2}
-                className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
-                placeholder="Exact-match answer used for automatic FR grading."
-              />
+                    ...frQ,
+                    answerMode: "text",
+                  })
+                }}
+                className="h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              >
+                <option value="text">Text exact match</option>
+                <option value="slot">Задгай даалгавар (a-h letters)</option>
+              </select>
+
+              {(frQ.answerMode || "text") === "slot" ? (
+                <div className="flex flex-col gap-3 rounded-lg border border-border p-3">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-sm font-medium text-foreground">
+                      Letters (a-h)
+                    </label>
+                    <input
+                      type="text"
+                      value={(frQ.slotLetters || []).join("")}
+                      onChange={(e) => {
+                        const slotLetters = normalizeSlotLetters(e.target.value)
+                        const slotCorrectChoices = slotLetters.map(
+                          (_, i) => frQ.slotCorrectChoices?.[i] || ""
+                        )
+                        onUpdate({
+                          ...frQ,
+                          answerMode: "slot",
+                          slotLetters,
+                          slotCorrectChoices,
+                          correctAnswer: buildSlotAnswer(slotLetters, slotCorrectChoices),
+                        })
+                      }}
+                      className="h-9 px-3 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring font-mono"
+                      placeholder="e.g. abcd"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Each letter maps to one symbol (sign, digit, decimal point).
+                    </p>
+                  </div>
+
+                  {(frQ.slotLetters || []).length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {(frQ.slotLetters || []).map((letter, i) => (
+                        <label
+                          key={`${letter}-${i}`}
+                          className="flex items-center justify-between gap-3 rounded-md border border-border px-3 py-2"
+                        >
+                          <span className="text-sm font-medium text-foreground">
+                            {letter}
+                          </span>
+                          <select
+                            value={frQ.slotCorrectChoices?.[i] || ""}
+                            onChange={(e) => {
+                              const slotLetters = frQ.slotLetters || []
+                              const slotCorrectChoices = slotLetters.map(
+                                (_, idx) =>
+                                  idx === i
+                                    ? e.target.value
+                                    : frQ.slotCorrectChoices?.[idx] || ""
+                              )
+                              onUpdate({
+                                ...frQ,
+                                answerMode: "slot",
+                                slotLetters,
+                                slotCorrectChoices,
+                                correctAnswer: buildSlotAnswer(
+                                  slotLetters,
+                                  slotCorrectChoices
+                                ),
+                              })
+                            }}
+                            className="h-8 w-24 px-2 rounded-md border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring font-mono"
+                          >
+                            <option value="">-</option>
+                            {SLOT_SYMBOL_OPTIONS.map((option) => (
+                              <option key={option} value={option}>
+                                {option}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      Enter at least one letter between a and h.
+                    </p>
+                  )}
+
+                  <div className="text-sm">
+                    <span className="text-muted-foreground">Correct answer: </span>
+                    <span className="font-mono text-foreground">
+                      {buildSlotAnswer(
+                        frQ.slotLetters || [],
+                        frQ.slotCorrectChoices || []
+                      ) || "(empty)"}
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <label className="text-sm font-medium text-foreground">
+                    Correct Answer
+                  </label>
+                  <textarea
+                    value={frQ.correctAnswer || ""}
+                    onChange={(e) =>
+                      onUpdate({
+                        ...frQ,
+                        correctAnswer: e.target.value,
+                      })
+                    }
+                    rows={2}
+                    className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring resize-y font-mono"
+                    placeholder="Exact-match answer used for automatic FR grading."
+                  />
+                </>
+              )}
             </div>
           )}
 

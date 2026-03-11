@@ -78,6 +78,26 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
       {
         questionText: "",
         description: "",
+        answerMode: "text",
+        slotLetters: [],
+        slotCorrectChoices: [],
+        correctAnswer: "",
+        points: 5,
+        solution: "",
+        order: prev.length + 1,
+      },
+    ])
+  }
+
+  const addSlotFRQuestion = () => {
+    setFrQuestions((prev) => [
+      ...prev,
+      {
+        questionText: "",
+        description: "",
+        answerMode: "slot",
+        slotLetters: ["a", "b", "c", "d"],
+        slotCorrectChoices: ["", "", "", ""],
         correctAnswer: "",
         points: 5,
         solution: "",
@@ -359,14 +379,24 @@ export function TestEditorForm({ initialData, mode }: TestEditorFormProps) {
           />
         ))}
         <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={addFRQuestion}
-            className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
-          >
-            <Plus className="h-4 w-4" />
-            Add FR
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={addFRQuestion}
+              className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <Plus className="h-4 w-4" />
+              Add FR Text
+            </button>
+            <button
+              type="button"
+              onClick={addSlotFRQuestion}
+              className="inline-flex items-center gap-1.5 h-9 px-3 bg-primary text-primary-foreground text-sm font-medium rounded-lg hover:opacity-90 transition-opacity"
+            >
+              <Plus className="h-4 w-4" />
+              Add FR Slot
+            </button>
+          </div>
         </div>
       </section>
 
